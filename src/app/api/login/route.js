@@ -1,6 +1,6 @@
 import cookie from "cookie";
 
-export default function handler(req, res) {
+export function GET(request) {
   const serializedCookie = cookie.serialize(
     "auth",
     "8794c472-0399-40e7-aaf5-816d71c9b82c",
@@ -13,11 +13,14 @@ export default function handler(req, res) {
     }
   );
 
-  res.setHeader("Set-Cookie", serializedCookie);
-
-  res.status(200).json({ message: "Cookie has been set" });
-
-  res.setHeader("Set-Cookie", serializedCookie);
-
-  res.status(200).json({ success: true, message: "" });
+  return new Response(
+    JSON.stringify({ success: true, message: "login efetuado com sucesso!" }),
+    {
+      status: 200,
+      headers: {
+        "Set-Cookie": serializedCookie,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
