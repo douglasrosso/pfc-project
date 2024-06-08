@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
-import styles from "@/styles/layout.module.css";
+import "@/styles/globals.css";
 import ptBR from "antd/lib/locale/pt_BR";
 import { ConfigProvider } from "antd";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ConfigProvider locale={ptBR}>
-          <section className={styles?.layout}>{children}</section>
+          <AntdRegistry>{children}</AntdRegistry>
         </ConfigProvider>
       </body>
     </html>
