@@ -4,7 +4,7 @@ import connectDB from "@/db/connect";
 
 dotenv.config();
 
-export async function GET(request) {
+export async function GET() {
   await connectDB();
   const categories = await Category.find();
 
