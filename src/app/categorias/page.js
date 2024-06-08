@@ -2,7 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Spin, message, Table, Typography, Space, Popconfirm } from "antd";
+import {
+  Spin,
+  message,
+  Table,
+  Typography,
+  Space,
+  Popconfirm,
+  Tooltip,
+} from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function Categories() {
@@ -55,13 +63,15 @@ export default function Categories() {
       key: "type",
     },
     {
-      title: "Action",
+      title: "Ações",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a href={"/categorias/" + record._id}>
-            <EditOutlined />
-          </a>
+          <Tooltip title="Editar Categoria">
+            <a href={"/categorias/" + record._id}>
+              <EditOutlined />
+            </a>
+          </Tooltip>
           <Popconfirm
             title="Excluir categoria"
             description="Você tem certeza que deseja excluir a categoria?"
@@ -69,9 +79,11 @@ export default function Categories() {
             okText="Sim"
             cancelText="Não"
           >
-            <a>
-              <DeleteOutlined />
-            </a>
+            <Tooltip title="Excluir Categoria">
+              <a color="danger">
+                <DeleteOutlined />
+              </a>
+            </Tooltip>
           </Popconfirm>
         </Space>
       ),

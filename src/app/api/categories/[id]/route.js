@@ -11,7 +11,7 @@ export async function PUT(request, { params }) {
   );
 }
 
-export async function GET(request, { params }) {
+export async function GET(_, { params }) {
   await connectDB();
   const category = await Category.findById(params.id);
 
@@ -20,7 +20,7 @@ export async function GET(request, { params }) {
   );
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(_, { params }) {
   await connectDB();
   const category = await Category.findByIdAndDelete(params.id);
 
