@@ -1,15 +1,16 @@
 "use client";
 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
-export default function Categoria({ params }) {
+export default function EditCategory({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
+  const router = useRouter();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(!!id);
 
@@ -18,7 +19,7 @@ export default function Categoria({ params }) {
       axios
         .get(`/api/categories/${id}`)
         .then((response) => {
-          setCategory(response.data);
+          setCategory(response.data.data);
           setLoading(false);
         })
         .catch(() => {
@@ -30,13 +31,9 @@ export default function Categoria({ params }) {
 
   const onFinish = async (values) => {
     try {
-      if (category) {
-        await axios.put(`/api/categories/${category.id}`, values);
-        message.success("Categoria atualizada com sucesso!");
-      } else {
-        await axios.post("/api/categories", values);
-        message.success("Categoria criada com sucesso!");
-      }
+      await axios.put(`/api/categories/${category._id}`, values);
+      message.success("Categoria atualizada com sucesso!");
+
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a categoria.");
@@ -44,67 +41,65 @@ export default function Categoria({ params }) {
   };
 
   const handleSuccess = () => {
-    router.push("/categories");
+    router.push("/categorias");
   };
 
   return (
-    
-      <main>
-        <Typography.Title
-          level={2}
-          style={{
-            marginBottom: 20,
-          }}
+    <main>
+      <Typography.Title
+        level={2}
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        Editar de Categoria
+      </Typography.Title>
+
+      {loading ? (
+        <Spin
+          size="large"
+          style={{ justifyContent: "center", display: "flex" }}
+        />
+      ) : (
+        <Form
+          form={form}
+          initialValues={category}
+          onFinish={onFinish}
+          layout="vertical"
         >
-          {category ? "Editar de Categoria" : "Nova Categoria"}
-        </Typography.Title>
-
-        {loading ? (
-          <Spin
-            size="large"
-            style={{ justifyContent: "center", display: "flex" }}
-          />
-        ) : (
-          <Form
-            form={form}
-            initialValues={category}
-            onFinish={onFinish}
-            layout="vertical"
+          <Form.Item
+            name="description"
+            label="Nome da Categoria"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o nome da categoria!",
+              },
+            ]}
           >
-            <Form.Item
-              name="name"
-              label="Nome da Categoria"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, insira o nome da categoria!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            <Input />
+          </Form.Item>
 
-            <Form.Item
-              name="type"
-              label="Tipo"
-              rules={[
-                { required: true, message: "Por favor, selecione o tipo!" },
-              ]}
-            >
-              <Select placeholder="Selecione um tipo">
-                <Option value="income">Receita</Option>
-                <Option value="expense">Despesa</Option>
-              </Select>
-            </Form.Item>
+          <Form.Item
+            name="type"
+            label="Tipo"
+            rules={[
+              { required: true, message: "Por favor, selecione o tipo!" },
+            ]}
+          >
+            <Select placeholder="Selecione um tipo">
+              <Option value="Receita">Receita</Option>
+              <Option value="Despesa">Despesa</Option>
+            </Select>
+          </Form.Item>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Salvar
-              </Button>
-            </Form.Item>
-          </Form>
-        )}
-      </main>
-    
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Salvar
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+    </main>
   );
 }

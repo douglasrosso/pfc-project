@@ -1,31 +1,32 @@
 "use client";
 
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
-export default function Categoria({ params }) {
+export default function CreateCategory({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
-  const [category, setCategory] = useState(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(!!id);
 
   const onFinish = async (values) => {
     try {
       await axios.post("/api/categories", values);
       message.success("Categoria criada com sucesso!");
-
       handleSuccess();
+      setLoading(false);
     } catch (error) {
       message.error("Erro ao salvar a categoria.");
+      setLoading(false);
     }
   };
 
   const handleSuccess = () => {
-    router.push("/categories");
+    router.push("/categorias");
   };
 
   return (
@@ -36,7 +37,7 @@ export default function Categoria({ params }) {
           marginBottom: 20,
         }}
       >
-        {category ? "Editar de Categoria" : "Nova Categoria"}
+        Nova Categoria
       </Typography.Title>
 
       {loading ? (
@@ -45,14 +46,9 @@ export default function Categoria({ params }) {
           style={{ justifyContent: "center", display: "flex" }}
         />
       ) : (
-        <Form
-          form={form}
-          initialValues={category}
-          onFinish={onFinish}
-          layout="vertical"
-        >
+        <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
-            name="name"
+            name="description"
             label="Nome da Categoria"
             rules={[
               {
@@ -72,8 +68,8 @@ export default function Categoria({ params }) {
             ]}
           >
             <Select placeholder="Selecione um tipo">
-              <Option value="income">Receita</Option>
-              <Option value="expense">Despesa</Option>
+              <Option value="Receita">Receita</Option>
+              <Option value="Despesa">Despesa</Option>
             </Select>
           </Form.Item>
 
