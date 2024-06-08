@@ -9,12 +9,16 @@ import {
   Spin,
   message,
   Table,
-  ConfigProvider,
+  Select,
+  Typography,
 } from "antd";
-import Head from "next/head";
+
+
+const { Option } = Select;
 
 export default function Usuario() {
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(false);
   const [loading, setLoading] = useState(true);
   const [form] = Form.useForm();
 
@@ -78,12 +82,17 @@ export default function Usuario() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Cadastro de Usuários</title>
-      </Head>
+    
+      
       <main>
-        <h1>Cadastro de Usuários</h1>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          {user ? "Edição Cadastral" : "Cadastro de Usuários"}
+        </Typography.Title>
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="name"
@@ -147,10 +156,13 @@ export default function Usuario() {
               },
             ]}
           >
-            <Input />
+            <Select placeholder="Selecione um nível">
+              <Option value="normal">Normal</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name="status"
             label="Status"
             rules={[
@@ -161,7 +173,7 @@ export default function Usuario() {
             ]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -169,10 +181,7 @@ export default function Usuario() {
             </Button>
           </Form.Item>
         </Form>
-
-        <h2>Lista de Usuários</h2>
-        {loading ? <Spin /> : <Table columns={columns} dataSource={users} />}
       </main>
-    </>
+    
   );
 }
