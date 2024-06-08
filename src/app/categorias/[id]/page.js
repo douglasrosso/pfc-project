@@ -41,7 +41,7 @@ export default function EditCategory({ params }) {
   };
 
   const handleSuccess = () => {
-    router.push("/categorias");
+    router.push("/categories");
   };
 
   return (

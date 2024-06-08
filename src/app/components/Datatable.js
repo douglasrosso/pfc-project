@@ -19,28 +19,36 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { useRouter } from "next/navigation";
 
-export default function Categories() {
-  const [categories, setCategories] = useState([]);
+export default function Datatable({
+  title,
+  columns,
+  onClickButton,
+  label,
+  route,
+}) {
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortedInfo, setSortedInfo] = useState({});
-  const router = useRouter();
-  const handleTableChange = (pagination, filters, sorter) => {
-    setSortedInfo(sorter);
-  };
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setSortedInfo(sorter);
+  };
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
   };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -57,7 +65,7 @@ export default function Categories() {
       >
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Busque por ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -78,7 +86,7 @@ export default function Categories() {
               width: 90,
             }}
           >
-            Search
+            Buscar
           </Button>
           <Button
             onClick={() => {
@@ -95,7 +103,7 @@ export default function Categories() {
               width: 90,
             }}
           >
-            Reset
+            Limpar
           </Button>
           <Button
             type="link"
@@ -104,7 +112,7 @@ export default function Categories() {
               close();
             }}
           >
-            close
+            fechar
           </Button>
         </Space>
       </div>
@@ -140,90 +148,78 @@ export default function Categories() {
   });
 
   useEffect(() => {
-    fetchCategories();
+    fetchItems();
   }, []);
 
   const handleConfirmClicked = (id) => {
     return () => {
-      deleteCategory(id);
+      deleteItem(id);
     };
   };
 
-  async function fetchCategories() {
+  async function fetchItems() {
     try {
-      const response = await axios.get("/api/categories");
-      setCategories(response.data.data);
+      const response = await axios.get(`/api/${route}`);
+      setItems(response.data.data);
       setLoading(false);
     } catch (error) {
-      message.error("Erro ao carregar as categories.");
+      message.error("Erro ao carregar a lista.");
       setLoading(false);
     }
   }
 
-  async function deleteCategory(id) {
+  async function deleteItem(id) {
     try {
       setLoading(true);
-      await axios.delete(`/api/categories/${id}`);
-      message.success("Categoria excluída com sucesso!");
+      await axios.delete(`/api/${route}/${id}`);
+      message.success(`${label} excluído(a) com sucesso!`);
       setLoading(false);
-      fetchCategories();
+      fetchItems();
     } catch (error) {
-      message.error("Erro ao excluir a categoria.");
+      message.error(`Erro ao excluir o(a) ${label}.`);
       setLoading(false);
     }
   }
 
-  const columns = [
-    {
-      title: "Nome da Categoria",
-      dataIndex: "description",
-      key: "description",
-      sorter: (a, b) => a.description.length - b.description.length,
-      sortOrder:
-        sortedInfo.columnKey === "description" ? sortedInfo.order : null,
-      ellipsis: true,
-      ...getColumnSearchProps("description"),
-    },
-    {
-      title: "Tipo",
-      dataIndex: "type",
-      key: "type",
-      sorter: (a, b) => a.type.length - b.type.length,
-      sortOrder: sortedInfo.columnKey === "type" ? sortedInfo.order : null,
-      ellipsis: true,
-      ...getColumnSearchProps("type"),
-    },
-    {
-      title: "Ações",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Tooltip title="Editar Categoria">
-            <a href={"/categories/" + record._id}>
-              <EditOutlined />
-            </a>
-          </Tooltip>
-          <Popconfirm
-            title="Excluir categoria"
-            description="Você tem certeza que deseja excluir a categoria?"
-            onConfirm={handleConfirmClicked(record._id)}
-            okText="Sim"
-            cancelText="Não"
-          >
-            <Tooltip title="Excluir Categoria">
-              <a color="danger">
-                <DeleteOutlined />
+  const columnsMapped = columns.map((column) => {
+    if (column.key === "action") {
+      return {
+        title: "Ações",
+        key: "action",
+        render: (_, record) => (
+          <Space size="middle">
+            <Tooltip title={`Editar ${label}`}>
+              <a href={`/${route}/${record._id}`}>
+                <EditOutlined />
               </a>
             </Tooltip>
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ];
-
-  const handleButtonClicked = () => {
-    router.push("/categories/new");
-  };
+            <Popconfirm
+              title={`Excluir ${label}`}
+              description={`Você tem certeza que deseja excluir o(a) ${label}?`}
+              onConfirm={handleConfirmClicked(record._id)}
+              okText="Sim"
+              cancelText="Não"
+            >
+              <Tooltip title={`Excluir ${label}`}>
+                <a color="danger">
+                  <DeleteOutlined />
+                </a>
+              </Tooltip>
+            </Popconfirm>
+          </Space>
+        ),
+      };
+    }
+    return {
+      title: column.title,
+      dataIndex: column.key,
+      key: column.key,
+      sorter: (a, b) => a[column.key].length - b[column.key].length,
+      sortOrder: sortedInfo.columnKey === column.key ? sortedInfo.order : null,
+      ellipsis: true,
+      ...getColumnSearchProps(column.key),
+    };
+  });
 
   return (
     <main>
@@ -237,8 +233,8 @@ export default function Categories() {
           sticky
           onChange={handleTableChange}
           loading={loading}
-          columns={columns}
-          dataSource={categories}
+          columns={columnsMapped}
+          dataSource={items}
           title={() => (
             <Space
               style={{
@@ -253,9 +249,9 @@ export default function Categories() {
                   marginBottom: 20,
                 }}
               >
-                Lista de categories
+                {title}
               </Typography.Title>
-              <Button onClick={handleButtonClicked}>new</Button>
+              <Button onClick={onClickButton}>Novo</Button>
             </Space>
           )}
         />

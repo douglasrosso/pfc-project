@@ -26,7 +26,7 @@ export default function CreateCategory({ params }) {
   };
 
   const handleSuccess = () => {
-    router.push("/categorias");
+    router.push("/categories");
   };
 
   return (
