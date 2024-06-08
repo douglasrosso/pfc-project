@@ -19,17 +19,13 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { useRouter } from "next/navigation";
 
-export default function Datatable({
-  title,
-  columns,
-  onClickButton,
-  label,
-  route,
-}) {
+export default function Datatable({ title, columns, label, route }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortedInfo, setSortedInfo] = useState({});
+  const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -157,6 +153,10 @@ export default function Datatable({
     };
   };
 
+  function handleNewClicked() {
+    router.push(`/${route}/new`);
+  }
+
   async function fetchItems() {
     try {
       const response = await axios.get(`/api/${route}`);
@@ -251,7 +251,7 @@ export default function Datatable({
               >
                 {title}
               </Typography.Title>
-              <Button onClick={onClickButton}>Novo</Button>
+              <Button onClick={handleNewClicked}>Novo</Button>
             </Space>
           )}
         />
