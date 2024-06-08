@@ -1,3 +1,5 @@
+"use client"
+
 import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -6,9 +8,9 @@ import { useRouter } from "next/router";
 
 const { Option } = Select;
 
-export default function Categoria() {
-  const router = useRouter();
-  const { id } = router.query;
+export default function Categoria({params}) {
+  //const router = useRouter();
+  const { id } = params;
   const [form] = Form.useForm();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(!!id);
