@@ -42,13 +42,13 @@ export default function Home() {
         >
           <Form.Item
             name="username"
-            rules={[{ required: true, message: "Por favor insira o usuário!" }]}
+            rules={[{ required: true, message: "Por favor, insira o usuário!" }]}
           >
             <Input prefix={<UserOutlined />} placeholder="Usuário" />
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "Por favor insira a senha!" }]}
+            rules={[{ required: true, message: "Por favor, insira a senha!" }]}
           >
             <Input.Password
               prefix={<LockOutlined />}

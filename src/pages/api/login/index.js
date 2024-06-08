@@ -15,9 +15,5 @@ export default function handler(req, res) {
 
   res.setHeader("Set-Cookie", serializedCookie);
 
-  res.status(200).json({ message: "Cookie has been set" });
-
-  res.setHeader("Set-Cookie", serializedCookie);
-
-  res.status(200).json({ success: true, message: "" });
+  res.status(200).json({ success: true, message: "Cookie has been set" });
 }
