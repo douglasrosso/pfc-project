@@ -1,15 +1,13 @@
-"use client"
+"use client";
 
 import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Form, Input, Select, Spin, message } from "antd";
-import { useRouter } from "next/router";
+import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
 
 const { Option } = Select;
 
-export default function Categoria({params}) {
-  //const router = useRouter();
+export default function Categoria({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
   const [category, setCategory] = useState(null);
@@ -58,8 +56,20 @@ export default function Categoria({params}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          {category ? "Editar categoria" : "Nova categoria"}
+        </Typography.Title>
+
         {loading ? (
-          <Spin size="large" />
+          <Spin
+            size="large"
+            style={{ justifyContent: "center", display: "flex" }}
+          />
         ) : (
           <Form
             form={form}
