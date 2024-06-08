@@ -2,9 +2,8 @@
 
 import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
-import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Form, Input, Button, notification, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
@@ -35,51 +34,46 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <div
-          style={{ maxWidth: "300px", margin: "0 auto", paddingTop: "50px" }}
+
+      <main>
+        <h1>Login</h1>
+        <Form
+          name="login"
+          onFinish={onFinish}
+          initialValues={{ remember: true }}
         >
-          <h1>Login</h1>
-          <Form
-            name="login"
-            onFinish={onFinish}
-            initialValues={{ remember: true }}
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Por favor insira o usuário!" }]}
           >
-            <Form.Item
-              name="username"
-              rules={[
-                { required: true, message: "Por favor insira o usuário!" },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Usuário" />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: "Por favor insira a senha!" }]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                type="password"
-                placeholder="Senha"
-              />
-            </Form.Item>
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}
-            >
-              <Checkbox>Lembrar me</Checkbox>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} block>
-                Entrar
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+            <Input prefix={<UserOutlined />} placeholder="Usuário" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Por favor insira a senha!" }]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              type="password"
+              placeholder="Senha"
+            />
+          </Form.Item>
+          <Form.Item
+            name="remember"
+            valuePropName="checked"
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Checkbox>Lembrar me</Checkbox>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading} block>
+              Entrar
+            </Button>
+          </Form.Item>
+        </Form>
       </main>
     </>
   );

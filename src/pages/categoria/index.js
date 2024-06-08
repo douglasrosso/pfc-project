@@ -1,27 +1,50 @@
-import React, { useState } from "react";
-import { Button } from "antd";
-import axios from "axios";
 import Head from "next/head";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, Form, Input, Select, Spin, message } from "antd";
+import { useRouter } from "next/router";
+
+const { Option } = Select;
 
 export default function Categoria() {
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
+  const [form] = Form.useForm();
+  const [category, setCategory] = useState(null);
+  const [loading, setLoading] = useState(!!id);
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`/api/categories/${id}`)
+        .then((response) => {
+          setCategory(response.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          message.error("Erro ao carregar a categoria.");
+          setLoading(false);
+        });
+    }
+  }, [id]);
 
   const onFinish = async (values) => {
-    setLoading(true);
     try {
-      // Faça a chamada para a API para salvar os dados
-      const response = await axios.post("/api/categorias", values); // Aqui, presumindo que sua API esteja disponível em /api/categorias
-      console.log("Categoria salva:", response.data);
-      // Limpe o formulário após salvar
-      form.resetFields();
+      if (category) {
+        await axios.put(`/api/categories/${category.id}`, values);
+        message.success("Categoria atualizada com sucesso!");
+      } else {
+        await axios.post("/api/categories", values);
+        message.success("Categoria criada com sucesso!");
+      }
+      handleSuccess();
     } catch (error) {
-      console.error("Erro ao salvar categoria:", error);
+      message.error("Erro ao salvar a categoria.");
     }
-    setLoading(false);
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const handleSuccess = () => {
+    router.push("/categories");
   };
 
   return (
@@ -33,37 +56,48 @@ export default function Categoria() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Button>seila</Button>
-
-        {/* <Form
-          name="categoria-form"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item
-            label="Nome da Categoria"
-            name="nome"
-            rules={[
-              {
-                required: true,
-                message: "Por favor insira o nome da categoria!",
-              },
-            ]}
+        {loading ? (
+          <Spin size="large" />
+        ) : (
+          <Form
+            form={form}
+            initialValues={category}
+            onFinish={onFinish}
+            layout="vertical"
           >
-            <Input />
-          </Form.Item>
+            <Form.Item
+              name="name"
+              label="Nome da Categoria"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, insira o nome da categoria!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item label="Descrição" name="descricao">
-            <Input.TextArea />
-          </Form.Item>
+            <Form.Item
+              name="type"
+              label="Tipo"
+              rules={[
+                { required: true, message: "Por favor, selecione o tipo!" },
+              ]}
+            >
+              <Select placeholder="Selecione um tipo">
+                <Option value="income">Receita</Option>
+                <Option value="expense">Despesa</Option>
+              </Select>
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Salvar
-            </Button>
-          </Form.Item>
-        </Form> */}
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
       </main>
     </>
   );
