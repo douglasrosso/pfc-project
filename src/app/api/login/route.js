@@ -1,26 +1,34 @@
-import cookie from "cookie";
+import { authenticate } from "@/utils/auth";
+import connectDB from "@/db/connect";
+import User from "@/models/User";
 
-export function GET(request) {
-  const serializedCookie = cookie.serialize(
-    "auth",
-    "8794c472-0399-40e7-aaf5-816d71c9b82c",
-    {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      maxAge: 60 * 60 * 24,
-      sameSite: "strict",
-      path: "/",
-    }
-  );
+export async function POST(request) {
+  const body = await request.json();
+  await connectDB();
+  const user = (
+    await User.find({ email: body.email, pwd: body.password })
+  )?.[0];
+  const hasUser = !!user?.id;
 
-  return new Response(
-    JSON.stringify({ success: true, message: "login efetuado com sucesso!" }),
-    {
-      status: 200,
-      headers: {
-        "Set-Cookie": serializedCookie,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  if (!hasUser) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Usuário e/ou senha incorreto!",
+      }),
+      { status: 200 }
+    );
+  }
+
+  if (user?.status !== "on") {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Usuário desativado por favor contate o administrador!",
+      }),
+      { status: 200 }
+    );
+  }
+
+  return await authenticate(user).then(res => res);
 }

@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 const { Option } = Select;
 
 export default function CreateCategory({ params }) {
-  const { id } = params;
+  const [loading, setLoading] = useState(!!id);
   const [form] = Form.useForm();
   const router = useRouter();
-  const [loading, setLoading] = useState(!!id);
+  const { id } = params;
 
   const onFinish = async (values) => {
     try {
@@ -73,8 +73,8 @@ export default function CreateCategory({ params }) {
             </Select>
           </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
+          <Form.Item >
+            <Button  type="primary" htmlType="submit">
               Salvar
             </Button>
           </Form.Item>

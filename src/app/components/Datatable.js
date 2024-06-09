@@ -188,7 +188,7 @@ export default function Datatable({ title, columns, label, route }) {
         key: "action",
         render: (_, record) => (
           <Space size="middle">
-            <Tooltip title={`Editar ${label}`}>
+            <Tooltip placement="left" title={`Editar ${label}`}>
               <a href={`/${route}/${record._id}`}>
                 <EditOutlined />
               </a>
@@ -200,7 +200,7 @@ export default function Datatable({ title, columns, label, route }) {
               okText="Sim"
               cancelText="Não"
             >
-              <Tooltip title={`Excluir ${label}`}>
+              <Tooltip placement="right" title={`Excluir ${label}`}>
                 <a color="danger">
                   <DeleteOutlined />
                 </a>
