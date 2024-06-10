@@ -6,6 +6,11 @@ import Datatable from "../components/Datatable";
 export default function Users() {
   const columns = [
     {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Nome",
       key: "name",
     },

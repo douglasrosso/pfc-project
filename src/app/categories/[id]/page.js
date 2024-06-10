@@ -20,12 +20,11 @@ export default function EditCategory({ params }) {
         .get(`/api/categories/${id}`)
         .then((response) => {
           setCategory(response.data.data);
-          setLoading(false);
         })
         .catch(() => {
           message.error("Erro ao carregar a categoria.");
-          setLoading(false);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, [id]);
 
@@ -54,7 +53,6 @@ export default function EditCategory({ params }) {
       >
         Editar categoria
       </Typography.Title>
-
       {loading ? (
         <Spin
           size="large"
