@@ -1,32 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useStatez } from "react";
 import axios from "axios";
-import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
-import { useRouter } from "next/navigation";
+import { Button, Form, Input, Spin, Typography, message } from "antd";
 
-const { Option } = Select;
-
-export default function CreateCategory() {
-  const [loading, setLoading] = useState(false);
+export default function CreateAccount() {
   const [form] = Form.useForm();
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.post("/api/categories", values);
-      message.success("Categoria criada com sucesso!");
+      await axios.post("/api/accounts", values);
+      message.success("Conta criada com sucesso!");
       handleSuccess();
+      router.push("/accounts");
     } catch (error) {
-      message.error("Erro ao salvar a categoria.");
+      message.error("Erro ao salvar a conta.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSuccess = () => {
-    router.push("/categories");
+    router.push("/accounts");
   };
 
   return (
@@ -37,9 +34,8 @@ export default function CreateCategory() {
           marginBottom: 20,
         }}
       >
-        Nova categoria
+        Nova conta
       </Typography.Title>
-
       {loading ? (
         <Spin
           size="large"
@@ -49,11 +45,11 @@ export default function CreateCategory() {
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="description"
-            label="Nome da Categoria"
+            label="Descrição"
             rules={[
               {
                 required: true,
-                message: "Por favor, insira o nome da categoria!",
+                message: "Por favor, insira a descrição da conta!",
               },
             ]}
           >
@@ -61,16 +57,16 @@ export default function CreateCategory() {
           </Form.Item>
 
           <Form.Item
-            name="type"
-            label="Tipo"
+            name="comments"
+            label="Conta"
             rules={[
-              { required: true, message: "Por favor, selecione o tipo!" },
+              {
+                required: true,
+                message: "Por favor, insira as informações da conta!",
+              },
             ]}
           >
-            <Select placeholder="Selecione um tipo">
-              <Option value="Receita">Receita</Option>
-              <Option value="Despesa">Despesa</Option>
-            </Select>
+            <Input.TextArea />
           </Form.Item>
 
           <Form.Item>

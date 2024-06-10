@@ -16,6 +16,7 @@ import {
 import {
   DeleteOutlined,
   EditOutlined,
+  PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -201,8 +202,8 @@ export default function Datatable({ title, columns, label, route }) {
               cancelText="Não"
             >
               <Tooltip placement="right" title={`Excluir ${label}`}>
-                <a color="danger">
-                  <DeleteOutlined />
+                <a>
+                  <DeleteOutlined style={{ color: "red" }} />
                 </a>
               </Tooltip>
             </Popconfirm>
@@ -214,7 +215,14 @@ export default function Datatable({ title, columns, label, route }) {
       title: column.title,
       dataIndex: column.key,
       key: column.key,
-      sorter: (a, b) => a[column.key].length - b[column.key].length,
+      sorter: (a, b) => {
+        if (typeof a[column.key] === "string" && typeof b[column.key] === "string") {
+          return a[column.key].localeCompare(b[column.key]);
+        } else if (typeof a[column.key] === "number" && typeof b[column.key] === "number") {
+          return a[column.key] - b[column.key];
+        }
+        return 0;
+      },
       sortOrder: sortedInfo.columnKey === column.key ? sortedInfo.order : null,
       ellipsis: true,
       ...getColumnSearchProps(column.key),
@@ -251,7 +259,13 @@ export default function Datatable({ title, columns, label, route }) {
               >
                 {title}
               </Typography.Title>
-              <Button onClick={handleNewClicked}>Novo</Button>
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={handleNewClicked}
+              >
+                Novo
+              </Button>
             </Space>
           )}
         />

@@ -52,7 +52,7 @@ export default function EditCategory({ params }) {
           marginBottom: 20,
         }}
       >
-        Editar de Categoria
+        Editar categoria
       </Typography.Title>
 
       {loading ? (
