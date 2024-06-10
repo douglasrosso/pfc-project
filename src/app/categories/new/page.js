@@ -1,26 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
-export default function CreateCategory({ params }) {
-  const [loading, setLoading] = useState(!!id);
+export default function CreateCategory() {
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
-  const { id } = params;
 
   const onFinish = async (values) => {
     try {
+      setLoading(true);
       await axios.post("/api/categories", values);
       message.success("Categoria criada com sucesso!");
       handleSuccess();
       setLoading(false);
     } catch (error) {
       message.error("Erro ao salvar a categoria.");
+    } finally {
       setLoading(false);
     }
   };
@@ -73,8 +74,8 @@ export default function CreateCategory({ params }) {
             </Select>
           </Form.Item>
 
-          <Form.Item >
-            <Button  type="primary" htmlType="submit">
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
               Salvar
             </Button>
           </Form.Item>
