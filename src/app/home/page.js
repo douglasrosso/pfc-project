@@ -1,3 +1,11 @@
+"use client"
+
+import { Fragment } from "react";
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <Fragment>
+      <div>Home</div>
+    </Fragment>
+  );
 }

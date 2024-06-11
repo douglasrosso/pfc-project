@@ -3,11 +3,13 @@
 import { Form, Input, Button, notification, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "./contexts/AuthContext";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
+  const { setIsAuthenticated } = useContext(AuthContext);
   const router = useRouter();
   const onFinish = async (values) => {
     setLoading(true);
@@ -15,8 +17,10 @@ export default function Home() {
       setLoading(false);
       const response = await axios.post("/api/login", values);
       if (response?.data?.success) {
+        setIsAuthenticated(true);
         router.push("/home");
       } else {
+        setIsAuthenticated(false);
         notification.error({
           message: "Falha no login",
           description: response?.data?.message ?? "Erro ao efetuar login",
