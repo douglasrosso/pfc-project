@@ -57,7 +57,7 @@ export default function CreateCategory() {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome da categoria" />
           </Form.Item>
 
           <Form.Item

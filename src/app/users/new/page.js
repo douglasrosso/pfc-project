@@ -67,7 +67,7 @@ export default function CreateUser() {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome do usuário" />
           </Form.Item>
 
           <Form.Item
@@ -80,7 +80,7 @@ export default function CreateUser() {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o e-mail do usuário" />
           </Form.Item>
 
           <Form.Item
@@ -93,7 +93,7 @@ export default function CreateUser() {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome de usuário" />
           </Form.Item>
 
           <Form.Item
@@ -106,7 +106,7 @@ export default function CreateUser() {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Insira a senha" />
           </Form.Item>
 
           <Form.Item
@@ -123,10 +123,6 @@ export default function CreateUser() {
               <Option value="normal">Normal</Option>
               <Option value="admin">Admin</Option>
             </Select>
-          </Form.Item>
-
-          <Form.Item name="status" label="Status" valuePropName="checked">
-            <Switch />
           </Form.Item>
 
           <Form.Item>

@@ -79,7 +79,7 @@ export default function EditCategory({ params }) {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome da categoria" />
           </Form.Item>
 
           <Form.Item

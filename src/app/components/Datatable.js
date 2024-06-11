@@ -216,9 +216,15 @@ export default function Datatable({ title, columns, label, route }) {
       dataIndex: column.key,
       key: column.key,
       sorter: (a, b) => {
-        if (typeof a[column.key] === "string" && typeof b[column.key] === "string") {
+        if (
+          typeof a[column.key] === "string" &&
+          typeof b[column.key] === "string"
+        ) {
           return a[column.key].localeCompare(b[column.key]);
-        } else if (typeof a[column.key] === "number" && typeof b[column.key] === "number") {
+        } else if (
+          typeof a[column.key] === "number" &&
+          typeof b[column.key] === "number"
+        ) {
           return a[column.key] - b[column.key];
         }
         return 0;
@@ -242,7 +248,10 @@ export default function Datatable({ title, columns, label, route }) {
           onChange={handleTableChange}
           loading={loading}
           columns={columnsMapped}
-          dataSource={items}
+          dataSource={items.map((item) => ({
+            ...item,
+            key: item._id,
+          }))}
           title={() => (
             <Space
               style={{

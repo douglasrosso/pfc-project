@@ -94,7 +94,7 @@ export default function EditUser({ params }) {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome do usuário" />
           </Form.Item>
 
           <Form.Item
@@ -107,7 +107,7 @@ export default function EditUser({ params }) {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o e-mail do usuário" />
           </Form.Item>
 
           <Form.Item
@@ -120,7 +120,7 @@ export default function EditUser({ params }) {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o nome de usuário" />
           </Form.Item>
 
           <Form.Item
@@ -133,7 +133,7 @@ export default function EditUser({ params }) {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Insira a senha" />
           </Form.Item>
 
           <Form.Item

@@ -70,11 +70,11 @@ export default function EditAccount({ params }) {
             rules={[
               {
                 required: true,
-                message: "Por favor, insira o tipo da conta da conta!",
+                message: "Por favor, insira o tipo da conta!",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Insira o tipo da conta" />
           </Form.Item>
 
           <Form.Item
@@ -87,7 +87,7 @@ export default function EditAccount({ params }) {
               },
             ]}
           >
-            <Input.TextArea />
+            <Input.TextArea placeholder="Insira as informações da conta" />
           </Form.Item>
 
           <Form.Item>
