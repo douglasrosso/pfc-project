@@ -118,7 +118,7 @@ export default function EditEntry({ params }) {
             },
           ]}
         >
-          <DatePicker placeholder="Selecione a data de vencimento" />
+          <DatePicker placeholder="Selecione a data de vencimento" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -131,7 +131,7 @@ export default function EditEntry({ params }) {
             },
           ]}
         >
-          <DatePicker placeholder="Selecione a data de pagamento" />
+          <DatePicker placeholder="Selecione a data de pagamento" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item

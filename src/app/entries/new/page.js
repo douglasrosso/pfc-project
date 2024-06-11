@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -12,18 +12,53 @@ import {
   InputNumber,
 } from "antd";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const { Option } = Select;
 
 export default function CreateEntry() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [categories, setCategories] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
   const router = useRouter();
+
+  useEffect(() => {
+    fetchCategories();
+    fetchAccounts();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/categories");
+      setCategories(response.data.data);
+    } catch (error) {
+      message.error("Erro ao carregar as categorias.");
+    }
+  };
+
+  const fetchAccounts = async () => {
+    try {
+      const response = await axios.get("/api/accounts");
+      setAccounts(response.data.data);
+    } catch (error) {
+      message.error("Erro ao carregar as contas.");
+    }
+  };
+
+  const onValuesChange = (changedValues, allValues) => {
+    if (changedValues.type) {
+      const filtered = categories.filter(category => category.type === changedValues.type);
+      setFilteredCategories(filtered);
+      form.setFieldsValue({ categories: null }); 
+    }
+  };
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      console.log(values);
+      await axios.post("/api/entries", values);
       message.success("Entrada criada com sucesso!");
       handleSuccess();
     } catch (error) {
@@ -39,7 +74,7 @@ export default function CreateEntry() {
 
   return (
     <main>
-      <Form form={form} onFinish={onFinish} layout="vertical">
+      <Form form={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
           label="Tipo"
@@ -66,7 +101,13 @@ export default function CreateEntry() {
             },
           ]}
         >
-          <Select placeholder="Selecione a categoria"></Select>
+          <Select placeholder="Selecione a categoria">
+            {filteredCategories.map((category) => (
+              <Option key={category._id} value={category._id}>
+                {category.description}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -105,7 +146,7 @@ export default function CreateEntry() {
             },
           ]}
         >
-          <DatePicker placeholder="Selecione a data de vencimento" />
+          <DatePicker placeholder="Selecione a data de vencimento" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -118,7 +159,7 @@ export default function CreateEntry() {
             },
           ]}
         >
-          <DatePicker placeholder="Selecione a data de pagamento" />
+          <DatePicker placeholder="Selecione a data de pagamento" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -131,7 +172,13 @@ export default function CreateEntry() {
             },
           ]}
         >
-          <Select placeholder="Selecione a conta"></Select>
+          <Select placeholder="Selecione a conta">
+            {accounts.map((account) => (
+              <Option key={account._id} value={account._id}>
+                {`${account.description} - ${account.comments}`}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -152,12 +199,8 @@ export default function CreateEntry() {
           </Select>
         </Form.Item>
 
-        <Form.Item name="comments" label="Ativo" valuePropName="checked">
-          <Switch />
-        </Form.Item>
-
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             Salvar
           </Button>
         </Form.Item>
