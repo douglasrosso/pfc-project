@@ -6,80 +6,61 @@ import {
   Button,
   Form,
   Input,
-  Spin,
-  message,
-  Table,
   Select,
+  Spin,
+  Switch,
   Typography,
-  Checkbox,
+  message,
 } from "antd";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
-export default function Usuario() {
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(false);
-  const [loading, setLoading] = useState(true);
+export default function EditUser({ params }) {
+  const { id } = params;
   const [form] = Form.useForm();
+  const router = useRouter();
+  const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUser();
+  }, [id]);
 
-  const fetchUsers = async () => {
+  async function fetchUser() {
     try {
-      const response = await axios.get("/api/users");
-      setUsers(response.data);
-      setLoading(false);
+      setLoading(true);
+      if (id) {
+        const response = await axios.get(`/api/users/${id}`);
+        const userData = response.data.data;
+        userData.status = userData.status === "on";
+
+        form.setFieldsValue(userData);
+      }
     } catch (error) {
-      message.error("Erro ao carregar os usuários.");
+      message.error("Erro ao carregar o usuário.");
+    } finally {
       setLoading(false);
     }
-  };
+  }
 
   const onFinish = async (values) => {
     try {
-      await axios.post("/api/users", values);
-      message.success("Usuário cadastrado com sucesso!");
-      form.resetFields();
-      fetchUsers();
+      setLoading(true);
+      values.status = values.status ? "on" : "off";
+      await axios.put(`/api/users/${form.getFieldValue("_id")}`, values);
+      message.success("Usuário atualizado com sucesso!");
+
+      handleSuccess();
     } catch (error) {
-      message.error("Erro ao cadastrar o usuário.");
+      message.error("Erro ao salvar o usuário.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Nome",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "E-mail",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Usuário",
-      dataIndex: "user",
-      key: "user",
-    },
-    {
-      title: "Nível",
-      dataIndex: "level",
-      key: "level",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-  ];
+  const handleSuccess = () => {
+    router.push("/users");
+  };
 
   return (
     <main>
@@ -91,96 +72,97 @@ export default function Usuario() {
       >
         Edição Cadastral
       </Typography.Title>
-      <Form form={form} onFinish={onFinish} layout="vertical">
-        <Form.Item
-          name="name"
-          label="Nome"
-          rules={[
-            {
-              required: true,
-              message: "Por favor, insira o nome do usuário!",
-            },
-          ]}
+      {loading ? (
+        <Spin
+          size="large"
+          style={{ justifyContent: "center", display: "flex" }}
+        />
+      ) : (
+        <Form
+          form={form}
+          initialValues={form}
+          onFinish={onFinish}
+          layout="vertical"
         >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="name"
+            label="Nome"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o nome do usuário!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          name="email"
-          label="E-mail"
-          rules={[
-            {
-              required: true,
-              message: "Por favor, insira o e-mail do usuário!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="email"
+            label="E-mail"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o e-mail do usuário!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          name="user"
-          label="Usuário"
-          rules={[
-            {
-              required: true,
-              message: "Por favor, insira o nome de usuário!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="user"
+            label="Usuário"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira o nome de usuário!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          name="pwd"
-          label="Senha"
-          rules={[
-            {
-              required: true,
-              message: "Por favor, insira a senha!",
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
+          <Form.Item
+            name="pwd"
+            label="Senha"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, insira a senha!",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
 
-        <Form.Item
-          name="level"
-          label="Nível"
-          rules={[
-            {
-              required: true,
-              message: "Por favor, selecione o nível de acesso!",
-            },
-          ]}
-        >
-          <Select placeholder="Selecione um nível">
-            <Option value="normal">Normal</Option>
-            <Option value="admin">Admin</Option>
-          </Select>
-        </Form.Item>
+          <Form.Item
+            name="level"
+            label="Nível"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, selecione o nível de acesso!",
+              },
+            ]}
+          >
+            <Select placeholder="Selecione um nível">
+              <Option value="normal">Normal</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
+          </Form.Item>
 
-        <Form.Item
-          name="status"
-          label="Status"
-          valuePropName="checked"
-          initialValue={true}
-          rules={[
-            {
-              required: true,
-              message: "Por favor, selecione o status do usuário!",
-            },
-          ]}
-        >
-          <Checkbox>Ativo</Checkbox>
-        </Form.Item>
+          <Form.Item name="status" label="Status" valuePropName="checked">
+            <Switch />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Editar usuário
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Editar usuário
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
     </main>
   );
 }

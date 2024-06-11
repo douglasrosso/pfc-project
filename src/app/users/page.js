@@ -3,34 +3,34 @@
 import React from "react";
 import Datatable from "../components/Datatable";
 
-export default function Users() {
-  const columns = [
-    {
-      title: "Nome",
-      key: "name",
-    },
-    {
-      title: "E-mail",
-      key: "email",
-    },
-    {
-      title: "Usuário",
-      key: "user",
-    },
-    {
-      title: "Nível",
-      key: "level",
-    },
-    {
-      title: "Status",
-      key: "status",
-    },
-    {
-      title: "Ações",
-      key: "action",
-    },
-  ];
+const columns = [
+  {
+    title: "Nome",
+    key: "name",
+  },
+  {
+    title: "E-mail",
+    key: "email",
+  },
+  {
+    title: "Usuário",
+    key: "user",
+  },
+  {
+    title: "Nível",
+    key: "level",
+  },
+  {
+    title: "Status",
+    key: "status",
+  },
+  {
+    title: "Ações",
+    key: "action",
+  },
+];
 
+export default function Users() {
   return (
     <main>
       <Datatable
