@@ -1,25 +1,17 @@
-"use client";
+"use client"
 
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Select,
-  Switch,
-  DatePicker,
-  message,
-  InputNumber,
-} from "antd";
+import { Button, Form, Input, Select, Switch, DatePicker, message, InputNumber } from "antd";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import moment from "moment";
 
 const { Option } = Select;
 
 export default function EditEntry({ params }) {
-  const { id } = params;
-  const [form] = Form.useForm();
   const router = useRouter();
+  const { id } = params || {};
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(!!id);
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
@@ -38,8 +30,9 @@ export default function EditEntry({ params }) {
       setLoading(true);
       const response = await axios.get(`/api/entries/${id}`);
       const entryData = response.data.data;
+      entryData.due_date = moment(entryData.due_date);
+      entryData.payment_date = moment(entryData.payment_date);
       form.setFieldsValue(entryData);
-      setEntryDetails(entryData);
     } catch (error) {
       message.error("Erro ao carregar a entrada.");
     } finally {
@@ -76,6 +69,8 @@ export default function EditEntry({ params }) {
   const onFinish = async (values) => {
     try {
       setLoading(true);
+      values.due_date = values.due_date.toISOString();
+      values.payment_date = values.payment_date.toISOString();
       await axios.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
       handleSuccess();
@@ -92,7 +87,7 @@ export default function EditEntry({ params }) {
 
   return (
     <main>
-      <Form form={form} initialValues={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
+      <Form form={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
           label="Tipo"
