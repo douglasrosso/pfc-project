@@ -1,22 +1,32 @@
 "use client";
 
-import React, { useStatez } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Button, Form, Input, Spin, Typography, message } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  message,
+  Select,
+  Spin,
+  Typography,
+} from "antd";
+import { useRouter } from "next/navigation";
 
 export default function CreateAccount() {
-  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const router = useRouter();
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
       await axios.post("/api/accounts", values);
-      message.success("Conta criada com sucesso!");
+      message.success("Conta cadastrada com sucesso!");
       handleSuccess();
-      router.push("/accounts");
     } catch (error) {
-      message.error("Erro ao salvar a conta.");
+      message.error("Erro ao cadastrar a conta.");
     } finally {
       setLoading(false);
     }
@@ -45,11 +55,11 @@ export default function CreateAccount() {
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="description"
-            label="Descrição"
+            label="Tipo da conta"
             rules={[
               {
                 required: true,
-                message: "Por favor, insira a descrição da conta!",
+                message: "Por favor, insira o tipo da conta da conta!",
               },
             ]}
           >
@@ -58,7 +68,7 @@ export default function CreateAccount() {
 
           <Form.Item
             name="comments"
-            label="Conta"
+            label="Informações da conta"
             rules={[
               {
                 required: true,

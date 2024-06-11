@@ -3,42 +3,48 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Form, Input, Spin, Typography, message } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function EditAccount({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
-  const [account, setAccount] = useState(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(!!id);
-
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`/api/accounts/${id}`)
-        .then((response) => {
-          setAccount(response.data);
-          form.setFieldsValue(response.data);
-          setLoading(false);
-        })
-        .catch(() => {
-          message.error("Erro ao carregar a conta.");
-          setLoading(false);
-        });
+    fetchUser();
+  }, [id]);
+
+  async function fetchUser() {
+    try {
+      setLoading(true);
+      if (id) {
+        const response = await axios.get(`/api/accounts/${id}`);
+        const userData = response.data.data;
+        form.setFieldsValue(userData);
+      }
+    } catch (error) {
+      message.error("Erro ao carregar a conta.");
+    } finally {
+      setLoading(false);
     }
-  }, [id, form]);
+  }
 
   const onFinish = async (values) => {
     try {
-      if (account) {
-        await axios.put(`/api/accounts/${account.id}`, values);
-        message.success("Conta atualizada com sucesso!");
-      } else {
-        await axios.post("/api/accounts", values);
-        message.success("Conta criada com sucesso!");
-      }
-      router.push("/accounts");
+      setLoading(true);
+      await axios.put(`/api/accounts/${form.getFieldValue("_id")}`, values);
+      message.success("Conta atualizada com sucesso!");
+
+      handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a conta.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSuccess = () => {
+    router.push("/accounts");
   };
 
   return (
@@ -60,11 +66,11 @@ export default function EditAccount({ params }) {
         <Form form={form} onFinish={onFinish} layout="vertical">
           <Form.Item
             name="description"
-            label="Descrição"
+            label="Tipo da conta"
             rules={[
               {
                 required: true,
-                message: "Por favor, insira a descrição da conta!",
+                message: "Por favor, insira o tipo da conta da conta!",
               },
             ]}
           >
@@ -73,7 +79,7 @@ export default function EditAccount({ params }) {
 
           <Form.Item
             name="comments"
-            label="Conta"
+            label="Informações da conta"
             rules={[
               {
                 required: true,

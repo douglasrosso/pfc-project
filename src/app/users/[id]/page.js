@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Select,
@@ -21,18 +20,21 @@ export default function EditUser({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
   const router = useRouter();
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
-    fetchUsers();
+    fetchUser();
   }, [id]);
 
-  async function fetchUsers() {
+  async function fetchUser() {
     try {
+      setLoading(true);
       if (id) {
         const response = await axios.get(`/api/users/${id}`);
-        setUser(response.data.data);
+        const userData = response.data.data;
+        userData.status = userData.status === "on";
+
+        form.setFieldsValue(userData);
       }
     } catch (error) {
       message.error("Erro ao carregar o usuário.");
@@ -43,12 +45,16 @@ export default function EditUser({ params }) {
 
   const onFinish = async (values) => {
     try {
-      await axios.put(`/api/users/${user._id}`, values);
+      setLoading(true);
+      values.status = values.status ? "on" : "off";
+      await axios.put(`/api/users/${form.getFieldValue("_id")}`, values);
       message.success("Usuário atualizado com sucesso!");
 
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar o usuário.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,7 +80,7 @@ export default function EditUser({ params }) {
       ) : (
         <Form
           form={form}
-          initialValues={user}
+          initialValues={form}
           onFinish={onFinish}
           layout="vertical"
         >
@@ -146,17 +152,7 @@ export default function EditUser({ params }) {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="status"
-            label="Status"
-            valuePropName="checked"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, selecione o status do usuário!",
-              },
-            ]}
-          >
+          <Form.Item name="status" label="Status" valuePropName="checked">
             <Switch />
           </Form.Item>
 

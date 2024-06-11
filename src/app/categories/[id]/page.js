@@ -11,7 +11,6 @@ export default function EditCategory({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
   const router = useRouter();
-  const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
@@ -21,8 +20,10 @@ export default function EditCategory({ params }) {
   async function fetchCategories() {
     try {
       if (id) {
+        setLoading(true);
         const response = await axios.get(`/api/categories/${id}`);
-        setCategory(response.data.data);
+        const userData = response.data.data;
+        form.setFieldsValue(userData);
       }
     } catch (error) {
       message.error("Erro ao carregar a categoria.");
@@ -33,7 +34,7 @@ export default function EditCategory({ params }) {
 
   const onFinish = async (values) => {
     try {
-      await axios.put(`/api/categories/${category._id}`, values);
+      await axios.put(`/api/categories/${form.getFieldValue("_id")}`, values);
       message.success("Categoria atualizada com sucesso!");
 
       handleSuccess();
@@ -64,7 +65,7 @@ export default function EditCategory({ params }) {
       ) : (
         <Form
           form={form}
-          initialValues={category}
+          initialValues={form}
           onFinish={onFinish}
           layout="vertical"
         >

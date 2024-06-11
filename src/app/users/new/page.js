@@ -10,6 +10,7 @@ import {
   message,
   Select,
   Spin,
+  Switch,
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
@@ -17,13 +18,14 @@ import { useRouter } from "next/navigation";
 const { Option } = Select;
 
 export default function CreateUser() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
+      values.status = values.status ? "on" : "off";
       await axios.post("/api/users", values);
       message.success("Usuário cadastrado com sucesso!");
       handleSuccess();
@@ -123,19 +125,8 @@ export default function CreateUser() {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="status"
-            label="Status"
-            valuePropName="checked"
-            initialValue={true}
-            rules={[
-              {
-                required: true,
-                message: "Por favor, selecione o status do usuário!",
-              },
-            ]}
-          >
-            <Checkbox>Ativo</Checkbox>
+          <Form.Item name="status" label="Status" valuePropName="checked">
+            <Switch />
           </Form.Item>
 
           <Form.Item>

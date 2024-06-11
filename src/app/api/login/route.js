@@ -8,7 +8,7 @@ export async function POST(request) {
   const user = (
     await User.find({ email: body.email, pwd: body.password })
   )?.[0];
-  const hasUser = !!user?.id;
+  const hasUser = !!user?._id;
 
   if (!hasUser) {
     return new Response(
@@ -30,5 +30,5 @@ export async function POST(request) {
     );
   }
 
-  return await authenticate(user).then(res => res);
+  return await authenticate(user).then((res) => res);
 }
