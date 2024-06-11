@@ -39,7 +39,7 @@ export async function authenticate(user) {
           );
         } else {
           const serializedCookie = cookie.serialize("auth", token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV !== "development",
             maxAge: 60 * 60 * 24,
             sameSite: "strict",

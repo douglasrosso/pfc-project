@@ -30,5 +30,5 @@ export async function POST(request) {
     );
   }
 
-  return await authenticate(user).then(res => res);
+  return await authenticate(user).then((res) => res);
 }
