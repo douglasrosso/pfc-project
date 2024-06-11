@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Spin,
+  Switch,
   Typography,
   message,
 } from "antd";
@@ -24,18 +25,21 @@ export default function EditUser({ params }) {
   const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`/api/users/${id}`)
-        .then((response) => {
-          setUser(response.data.data);
-        })
-        .catch(() => {
-          message.error("Erro ao carregar o usuário.");
-        })
-        .finally(() => setLoading(false));
-    }
+    fetchUsers();
   }, [id]);
+
+  async function fetchUsers() {
+    try {
+      if (id) {
+        const response = await axios.get(`/api/users/${id}`);
+        setUser(response.data.data);
+      }
+    } catch (error) {
+      message.error("Erro ao carregar o usuário.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const onFinish = async (values) => {
     try {
@@ -153,7 +157,7 @@ export default function EditUser({ params }) {
               },
             ]}
           >
-            <Checkbox>Ativo</Checkbox>
+            <Switch />
           </Form.Item>
 
           <Form.Item>

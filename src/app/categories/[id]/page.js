@@ -15,18 +15,21 @@ export default function EditCategory({ params }) {
   const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
-    if (id) {
-      axios
-        .get(`/api/categories/${id}`)
-        .then((response) => {
-          setCategory(response.data.data);
-        })
-        .catch(() => {
-          message.error("Erro ao carregar a categoria.");
-        })
-        .finally(() => setLoading(false));
-    }
+    fetchCategories();
   }, [id]);
+
+  async function fetchCategories() {
+    try {
+      if (id) {
+        const response = await axios.get(`/api/categories/${id}`);
+        setCategory(response.data.data);
+      }
+    } catch (error) {
+      message.error("Erro ao carregar a categoria.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const onFinish = async (values) => {
     try {
