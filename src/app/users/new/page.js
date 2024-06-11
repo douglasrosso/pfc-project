@@ -26,7 +26,7 @@ export default function CreateUser() {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      await axios.post("/api/users", values);
+      await axios.post("/api/users", { ...values, status: "on" });
       message.success("Usuário cadastrado com sucesso!");
       handleSuccess();
     } catch (error) {

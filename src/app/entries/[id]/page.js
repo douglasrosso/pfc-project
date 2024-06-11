@@ -1,9 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Button, Form, Input, Select, Switch, DatePicker, message, InputNumber } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  Switch,
+  DatePicker,
+  message,
+  InputNumber,
+} from "antd";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -12,19 +21,25 @@ export default function EditEntry({ params }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(!!id);
+  const [categories, setCategories] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
 
   useEffect(() => {
-    fetchEntry();
+    if (id) {
+      fetchCategories();
+      fetchAccounts();
+      fetchEntry();
+    }
   }, [id]);
 
   async function fetchEntry() {
     try {
       setLoading(true);
-      if (id) {
-        const response = await axios.get(`/api/entries/${id}`);
-        const entryData = response.data.data;
-        form.setFieldsValue(entryData);
-      }
+      const response = await axios.get(`/api/entries/${id}`);
+      const entryData = response.data.data;
+      form.setFieldsValue(entryData);
+      setEntryDetails(entryData);
     } catch (error) {
       message.error("Erro ao carregar a entrada.");
     } finally {
@@ -32,12 +47,37 @@ export default function EditEntry({ params }) {
     }
   }
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/categories");
+      setCategories(response.data.data);
+    } catch (error) {
+      message.error("Erro ao carregar as categorias.");
+    }
+  };
+
+  const fetchAccounts = async () => {
+    try {
+      const response = await axios.get("/api/accounts");
+      setAccounts(response.data.data);
+    } catch (error) {
+      message.error("Erro ao carregar as contas.");
+    }
+  };
+
+  const onValuesChange = (changedValues) => {
+    if (changedValues.type) {
+      const filtered = categories.filter(category => category.type === changedValues.type);
+      setFilteredCategories(filtered);
+      form.setFieldsValue({ categories: null });
+    }
+  };
+
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.put(`/api/entries/${form.getFieldValue("_id")}`, values);
+      await axios.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
-
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a entrada.");
@@ -52,7 +92,7 @@ export default function EditEntry({ params }) {
 
   return (
     <main>
-      <Form form={form} onFinish={onFinish} layout="vertical">
+      <Form form={form} initialValues={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
           label="Tipo"
@@ -79,7 +119,13 @@ export default function EditEntry({ params }) {
             },
           ]}
         >
-          <Select placeholder="Selecione a categoria"></Select>
+          <Select placeholder="Selecione a categoria">
+            {filteredCategories.map((category) => (
+              <Option key={category._id} value={category.description}>
+                {category.description}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -144,7 +190,13 @@ export default function EditEntry({ params }) {
             },
           ]}
         >
-          <Select placeholder="Selecione a conta"></Select>
+          <Select placeholder="Selecione a conta">
+            {accounts.map((account) => (
+              <Option key={account._id} value={`${account.description} - ${account.comments}`}>
+                {`${account.description} - ${account.comments}`}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -170,7 +222,7 @@ export default function EditEntry({ params }) {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             Salvar
           </Button>
         </Form.Item>

@@ -47,18 +47,18 @@ export default function CreateEntry() {
     }
   };
 
-  const onValuesChange = (changedValues, allValues) => {
+  const onValuesChange = (changedValues) => {
     if (changedValues.type) {
       const filtered = categories.filter(category => category.type === changedValues.type);
       setFilteredCategories(filtered);
-      form.setFieldsValue({ categories: null }); 
+      form.setFieldsValue({ categories: null });
     }
   };
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.post("/api/entries", values);
+      await axios.post("/api/entries", { ...values, comments: "on" });
       message.success("Entrada criada com sucesso!");
       handleSuccess();
     } catch (error) {
@@ -103,7 +103,7 @@ export default function CreateEntry() {
         >
           <Select placeholder="Selecione a categoria">
             {filteredCategories.map((category) => (
-              <Option key={category._id} value={category._id}>
+              <Option key={category._id} value={category.description}>
                 {category.description}
               </Option>
             ))}
@@ -174,7 +174,7 @@ export default function CreateEntry() {
         >
           <Select placeholder="Selecione a conta">
             {accounts.map((account) => (
-              <Option key={account._id} value={account._id}>
+              <Option key={account._id} value={`${account.description} - ${account.comments}`}>
                 {`${account.description} - ${account.comments}`}
               </Option>
             ))}

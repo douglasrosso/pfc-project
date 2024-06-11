@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   message,
-  Select,
   Spin,
   Typography,
 } from "antd";
