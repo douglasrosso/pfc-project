@@ -5,8 +5,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { Appbar } from "./components/Appbar";
 import { Inter } from "next/font/google";
 import ptBR from "antd/lib/locale/pt_BR";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Layout } from "antd";
 import "@/styles/globals.css";
+
+const { Header, Content } = Layout;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +19,10 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ConfigProvider locale={ptBR}>
             <AntdRegistry>
-              <Appbar />
-              {children}
+              <Layout>
+                <Appbar />
+                <Content style={{ paddingTop: "3rem" }}>{children}</Content>
+              </Layout>
             </AntdRegistry>
           </ConfigProvider>
         </AuthProvider>
