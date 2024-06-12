@@ -105,14 +105,31 @@ a {
     color-scheme: dark;
   }
 } */
-body {
+
+* {
   margin: 0;
-  display: block;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+header {
+  color: #fff;
+}
+
+body {
+  display: block;
+  height: 100vh;
+}
+
+.ant-layout {
+  height: 100%;
+}
+
 main {
-  min-width: 800px;
-  max-width: max-content;
+  padding: 1rem 0 !important;
+  min-width: 80%;
+  max-width: 95%;
   margin: 0 auto;
-  padding-top: 50px;
   padding: 0 5%;
+  height: 100%;
 }

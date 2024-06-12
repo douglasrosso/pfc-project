@@ -44,13 +44,13 @@ const columns = [
 
 export default function Entries() {
   return (
-    <main>
+    <div>
       <Datatable
         columns={columns}
         title="Entradas"
         label="entrada"
         route="entries"
       />
-    </main>
+    </div>
   );
 }

@@ -86,7 +86,7 @@ export default function EditEntry({ params }) {
   };
 
   return (
-    <main>
+    <div>
       <Form form={form} initialValues={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
@@ -222,6 +222,6 @@ export default function EditEntry({ params }) {
           </Button>
         </Form.Item>
       </Form>
-    </main>
+    </div>
   );
 }

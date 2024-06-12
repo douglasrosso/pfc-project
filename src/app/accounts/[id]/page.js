@@ -48,7 +48,7 @@ export default function EditAccount({ params }) {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -97,6 +97,6 @@ export default function EditAccount({ params }) {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }

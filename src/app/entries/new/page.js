@@ -73,7 +73,7 @@ export default function CreateEntry() {
   };
 
   return (
-    <main>
+    <div>
       <Form form={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
@@ -205,6 +205,6 @@ export default function CreateEntry() {
           </Button>
         </Form.Item>
       </Form>
-    </main>
+    </div>
   );
 }

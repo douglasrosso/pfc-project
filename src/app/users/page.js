@@ -28,13 +28,13 @@ const columns = [
 
 export default function Users() {
   return (
-    <main>
+    <div>
       <Datatable
         columns={columns}
         title="Usuários"
         label="usuario"
         route="users"
       />
-    </main>
+    </div>
   );
 }

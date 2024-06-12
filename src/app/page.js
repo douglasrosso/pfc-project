@@ -29,7 +29,7 @@ export default function Home() {
     }, 2000);
   };
   return (
-    <main>
+    <div>
       <h1>Login</h1>
       <Form name="login" onFinish={onFinish} initialValues={{ remember: true }}>
         <Form.Item
@@ -64,6 +64,6 @@ export default function Home() {
           </Button>
         </Form.Item>
       </Form>
-    </main>
+    </div>
   );
 }

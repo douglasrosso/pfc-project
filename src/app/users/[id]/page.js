@@ -63,7 +63,7 @@ export default function EditUser({ params }) {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -163,6 +163,6 @@ export default function EditUser({ params }) {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }

@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
             <AntdRegistry>
               <Layout>
                 <Appbar />
-                <Content style={{ paddingTop: "3rem" }}>{children}</Content>
+                <Content>{children}</Content>
               </Layout>
             </AntdRegistry>
           </ConfigProvider>

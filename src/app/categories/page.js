@@ -16,13 +16,13 @@ const columns = [
 
 export default function Categories() {
   return (
-    <main>
+    <div>
       <Datatable
         columns={columns}
         title="Categorias"
         label="categoria"
         route="categories"
       />
-    </main>
+    </div>
   );
 }

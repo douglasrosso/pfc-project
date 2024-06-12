@@ -234,7 +234,7 @@ export default function Datatable({ title, columns, label, route }) {
   }]);
 
   return (
-    <main>
+    <div>
       {loading ? (
         <Spin
           size="large"
@@ -277,6 +277,6 @@ export default function Datatable({ title, columns, label, route }) {
           )}
         />
       )}
-    </main>
+    </div>
   );
 }

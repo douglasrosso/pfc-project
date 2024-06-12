@@ -48,7 +48,7 @@ export default function EditCategory({ params }) {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -102,6 +102,6 @@ export default function EditCategory({ params }) {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }

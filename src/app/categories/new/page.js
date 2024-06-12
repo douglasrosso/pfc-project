@@ -30,7 +30,7 @@ export default function CreateCategory() {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -80,6 +80,6 @@ export default function CreateCategory() {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function CreateUser() {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -132,6 +132,6 @@ export default function CreateUser() {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }

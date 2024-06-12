@@ -35,7 +35,7 @@ export default function CreateAccount() {
   };
 
   return (
-    <main>
+    <div>
       <Typography.Title
         level={2}
         style={{
@@ -84,6 +84,6 @@ export default function CreateAccount() {
           </Form.Item>
         </Form>
       )}
-    </main>
+    </div>
   );
 }
