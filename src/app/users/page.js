@@ -23,11 +23,7 @@ const columns = [
   {
     title: "Status",
     key: "status",
-  },
-  {
-    title: "Ações",
-    key: "action",
-  },
+  }
 ];
 
 export default function Users() {

@@ -11,11 +11,7 @@ const columns = [
   {
     title: "Descrição",
     key: "description",
-  },
-  {
-    title: "Ações",
-    key: "action",
-  },
+  }
 ];
 
 export default function Accounts() {

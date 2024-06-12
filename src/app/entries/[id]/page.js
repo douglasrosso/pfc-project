@@ -87,7 +87,7 @@ export default function EditEntry({ params }) {
 
   return (
     <main>
-      <Form form={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
+      <Form form={form} initialValues={form} onValuesChange={onValuesChange} onFinish={onFinish} layout="vertical">
         <Form.Item
           name="type"
           label="Tipo"

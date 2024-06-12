@@ -183,34 +183,6 @@ export default function Datatable({ title, columns, label, route }) {
   }
 
   const columnsMapped = columns.map((column) => {
-    if (column.key === "action") {
-      return {
-        title: "Ações",
-        key: "action",
-        render: (_, record) => (
-          <Space size="middle">
-            <Tooltip placement="left" title={`Editar ${label}`}>
-              <a href={`/${route}/${record._id}`}>
-                <EditOutlined />
-              </a>
-            </Tooltip>
-            <Popconfirm
-              title={`Excluir ${label}`}
-              description={`Você tem certeza que deseja excluir o(a) ${label}?`}
-              onConfirm={handleConfirmClicked(record._id)}
-              okText="Sim"
-              cancelText="Não"
-            >
-              <Tooltip placement="right" title={`Excluir ${label}`}>
-                <a>
-                  <DeleteOutlined style={{ color: "red" }} />
-                </a>
-              </Tooltip>
-            </Popconfirm>
-          </Space>
-        ),
-      };
-    }
     return {
       title: column.title,
       dataIndex: column.key,
@@ -233,7 +205,33 @@ export default function Datatable({ title, columns, label, route }) {
       ellipsis: true,
       ...getColumnSearchProps(column.key),
     };
-  });
+  }).concat([{
+    title: "Ações",
+    key: "action",
+    width: "5rem",
+    render: (_, record) => (
+      <Space size="middle">
+        <Tooltip placement="left" title={`Editar ${label}`}>
+          <a href={`/${route}/${record._id}`}>
+            <EditOutlined />
+          </a>
+        </Tooltip>
+        <Popconfirm
+          title={`Excluir ${label}`}
+          description={`Você tem certeza que deseja excluir o(a) ${label}?`}
+          onConfirm={handleConfirmClicked(record._id)}
+          okText="Sim"
+          cancelText="Não"
+        >
+          <Tooltip placement="right" title={`Excluir ${label}`}>
+            <a>
+              <DeleteOutlined style={{ color: "red" }} />
+            </a>
+          </Tooltip>
+        </Popconfirm>
+      </Space>
+    ),
+  }]);
 
   return (
     <main>

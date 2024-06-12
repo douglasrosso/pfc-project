@@ -39,11 +39,7 @@ const columns = [
   {
     title: "Ativo",
     key: "comments",
-  },
-  {
-    title: "Ações",
-    key: "action",
-  },
+  }
 ];
 
 export default function Entries() {

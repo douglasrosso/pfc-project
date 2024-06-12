@@ -11,11 +11,7 @@ const columns = [
   {
     title: "Tipo",
     key: "type",
-  },
-  {
-    title: "Ações",
-    key: "action",
-  },
+  }
 ];
 
 export default function Categories() {
