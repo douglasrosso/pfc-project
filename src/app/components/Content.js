@@ -18,7 +18,7 @@ export default function Content({ children }) {
   return (
     <ContentAnt
       style={{
-        padding: "0 48px",
+        padding: "30px 48px 48px",
       }}
     >
       {isAuthenticated && (
@@ -32,8 +32,13 @@ export default function Content({ children }) {
       <div
         style={{
           background: colorBgContainer,
-          minHeight: 280,
-          padding: 24,
+          paddingInline: 24,
+          marginTop: "30px !important",
+          paddingBottom: 30,
+          minHeight: 200,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           borderRadius: borderRadiusLG,
         }}
       >
