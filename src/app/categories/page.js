@@ -11,18 +11,16 @@ const columns = [
   {
     title: "Tipo",
     key: "type",
-  }
+  },
 ];
 
 export default function Categories() {
   return (
-    <div>
-      <Datatable
-        columns={columns}
-        title="Categorias"
-        label="categoria"
-        route="categories"
-      />
-    </div>
+    <Datatable
+      columns={columns}
+      title="Categorias"
+      label="categoria"
+      route="categories"
+    />
   );
 }

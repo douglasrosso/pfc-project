@@ -23,18 +23,16 @@ const columns = [
   {
     title: "Status",
     key: "status",
-  }
+  },
 ];
 
 export default function Users() {
   return (
-    <div>
-      <Datatable
-        columns={columns}
-        title="Usuários"
-        label="usuario"
-        route="users"
-      />
-    </div>
+    <Datatable
+      columns={columns}
+      title="Usuários"
+      label="usuario"
+      route="users"
+    />
   );
 }

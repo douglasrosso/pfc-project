@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { Button, Form, Input, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
@@ -48,7 +48,7 @@ export default function EditAccount({ params }) {
   };
 
   return (
-    <div>
+    <Fragment>
       <Typography.Title
         level={2}
         style={{
@@ -97,6 +97,6 @@ export default function EditAccount({ params }) {
           </Form.Item>
         </Form>
       )}
-    </div>
+    </Fragment>
   );
 }

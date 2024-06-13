@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import axios from "axios";
 import {
   Button,
@@ -35,7 +35,7 @@ export default function CreateAccount() {
   };
 
   return (
-    <div>
+    <Fragment>
       <Typography.Title
         level={2}
         style={{
@@ -84,6 +84,6 @@ export default function CreateAccount() {
           </Form.Item>
         </Form>
       )}
-    </div>
+    </Fragment>
   );
 }

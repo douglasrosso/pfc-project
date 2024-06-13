@@ -39,18 +39,16 @@ const columns = [
   {
     title: "Ativo",
     key: "comments",
-  }
+  },
 ];
 
 export default function Entries() {
   return (
-    <div>
-      <Datatable
-        columns={columns}
-        title="Entradas"
-        label="entrada"
-        route="entries"
-      />
-    </div>
+    <Datatable
+      columns={columns}
+      title="Entradas"
+      label="entrada"
+      route="entries"
+    />
   );
 }

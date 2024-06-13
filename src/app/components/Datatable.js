@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
   Spin,
@@ -234,7 +234,7 @@ export default function Datatable({ title, columns, label, route }) {
   }]);
 
   return (
-    <div>
+    <Fragment>
       {loading ? (
         <Spin
           size="large"
@@ -277,6 +277,6 @@ export default function Datatable({ title, columns, label, route }) {
           )}
         />
       )}
-    </div>
+    </Fragment>
   );
 }

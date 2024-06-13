@@ -2,13 +2,11 @@
 
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "./contexts/AuthContext";
-import { Appbar } from "./components/Appbar";
 import { Inter } from "next/font/google";
 import ptBR from "antd/lib/locale/pt_BR";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider } from "antd";
 import "@/styles/globals.css";
-
-const { Header, Content } = Layout;
+import App from "./components/App";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +17,9 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ConfigProvider locale={ptBR}>
             <AntdRegistry>
-              <Layout>
-                <Appbar />
-                <Content>{children}</Content>
-              </Layout>
+              <main>
+                <App>{children}</App>
+              </main>
             </AntdRegistry>
           </ConfigProvider>
         </AuthProvider>

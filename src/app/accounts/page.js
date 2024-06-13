@@ -11,18 +11,16 @@ const columns = [
   {
     title: "Descrição",
     key: "description",
-  }
+  },
 ];
 
 export default function Accounts() {
   return (
-    <div>
-      <Datatable
-        columns={columns}
-        title="Contas"
-        label="conta"
-        route="accounts"
-      />
-    </div>
+    <Datatable
+      columns={columns}
+      title="Contas"
+      label="conta"
+      route="accounts"
+    />
   );
 }

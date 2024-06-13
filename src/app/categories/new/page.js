@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ export default function CreateCategory() {
   };
 
   return (
-    <div>
+    <Fragment>
       <Typography.Title
         level={2}
         style={{
@@ -80,6 +80,6 @@ export default function CreateCategory() {
           </Form.Item>
         </Form>
       )}
-    </div>
+    </Fragment>
   );
 }

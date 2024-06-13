@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
   Button,
@@ -63,7 +63,7 @@ export default function EditUser({ params }) {
   };
 
   return (
-    <div>
+    <Fragment>
       <Typography.Title
         level={2}
         style={{
@@ -163,6 +163,6 @@ export default function EditUser({ params }) {
           </Form.Item>
         </Form>
       )}
-    </div>
+    </Fragment>
   );
 }

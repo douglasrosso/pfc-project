@@ -3,7 +3,7 @@
 import { Form, Input, Button, notification, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "./contexts/AuthContext";
 
@@ -29,7 +29,7 @@ export default function Home() {
     }, 2000);
   };
   return (
-    <div>
+    <Fragment>
       <h1>Login</h1>
       <Form name="login" onFinish={onFinish} initialValues={{ remember: true }}>
         <Form.Item
@@ -64,6 +64,6 @@ export default function Home() {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Fragment>
   );
 }
