@@ -3,6 +3,17 @@
   margin: 0 !important;
 }
 
+body,
+body > main,
+body > main > div,
+body > main > div > main {
+  height: 100%;
+}
+
 .ant-layout-content {
-  min-height: 581px !important;
+  min-height: calc(100vh - 64px) !important;
+}
+
+.ant-table-pagination-right {
+  margin-top: 20px !important;
 }

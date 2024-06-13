@@ -46,8 +46,8 @@ export default function Entries() {
   return (
     <Datatable
       columns={columns}
-      title="Entradas"
-      label="entrada"
+      title="Lançamentos"
+      label="lançamento"
       route="entries"
     />
   );
