@@ -14,19 +14,22 @@ export default function Home() {
   const onFinish = async (values) => {
     setLoading(true);
     setTimeout(async () => {
-      setLoading(false);
-      const response = await axios.post("/api/login", values);
-      if (response?.data?.success) {
-        setIsAuthenticated(true);
-        router.push("/home");
-      } else {
-        setIsAuthenticated(false);
-        notification.error({
-          message: "Falha no login",
-          description: response?.data?.message ?? "Erro ao efetuar login",
-        });
+      try {
+        const response = await axios.post("/api/login", values);
+        if (response?.data?.success) {
+          setIsAuthenticated(true);
+          router.push("/home");
+        } else {
+          setIsAuthenticated(false);
+          notification.error({
+            message: "Falha no login",
+            description: response?.data?.message ?? "Erro ao efetuar login",
+          });
+        }
+      } finally {
+        setLoading(false);
       }
-    }, 2000);
+    }, 1000);
   };
   return (
     <Fragment>
