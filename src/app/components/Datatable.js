@@ -24,7 +24,7 @@ import Highlighter from "react-highlight-words";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
-export default function Datatable({ title, columns, label, route }) {
+export default function Datatable({ title, columns, label, route, data, onDelete }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortedInfo, setSortedInfo] = useState({});
@@ -162,6 +162,11 @@ export default function Datatable({ title, columns, label, route }) {
 
   async function fetchItems() {
     try {
+      if (data) {
+        setItems(data);
+        setLoading(false);
+        return;
+      }
       const response = await api.get(`/api/${route}`);
       setItems(response.data.data);
       setLoading(false);
@@ -177,6 +182,10 @@ export default function Datatable({ title, columns, label, route }) {
       await api.delete(`/api/${route}/${id}`);
       message.success(`${label} excluído(a) com sucesso!`);
       setLoading(false);
+      if (data) {
+        onDelete?.();
+        return;
+      }
       fetchItems();
     } catch (error) {
       message.error(`Erro ao excluir o(a) ${label}.`);
