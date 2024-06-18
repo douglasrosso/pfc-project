@@ -1,4 +1,3 @@
-import { getExpirationDateMiddleware } from "./middlewares/expirationMiddleware";
 import { isTokenValid } from "./utils/auth";
 
 export async function middleware(request) {
@@ -16,10 +15,6 @@ export async function middleware(request) {
           status: 401,
         }
       );
-    }
-
-    if(request.nextUrl.pathname === "/api/entries") {
-      await getExpirationDateMiddleware(request);
     }
   } else {
     if (!isAuthenticated && request.nextUrl.pathname !== "/") {
