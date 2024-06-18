@@ -15,7 +15,10 @@ export default function CreateCategory() {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.post("/api/categories", values);
+      const response = await axios.post("/api/categories", values);
+      if (!response.success && response.message) {
+        return;
+      }
       message.success("Categoria criada com sucesso!");
       handleSuccess();
     } catch (error) {

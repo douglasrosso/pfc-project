@@ -19,6 +19,9 @@ export default function EditAccount({ params }) {
       setLoading(true);
       if (id) {
         const response = await axios.get(`/api/accounts/${id}`);
+        if (!response.success && response.message) {
+          return;
+        }
         const userData = response.data.data;
         form.setFieldsValue(userData);
       }
@@ -32,9 +35,14 @@ export default function EditAccount({ params }) {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.put(`/api/accounts/${form.getFieldValue("_id")}`, values);
+      const response = await axios.put(
+        `/api/accounts/${form.getFieldValue("_id")}`,
+        values
+      );
+      if (!response.success && response.message) {
+        return;
+      }
       message.success("Conta atualizada com sucesso!");
-
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a conta.");

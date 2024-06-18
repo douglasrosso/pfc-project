@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect, Fragment } from "react";
 import axios from "axios";
+import moment from "moment";
 import {
   Spin,
   message,
@@ -161,6 +162,9 @@ export default function Datatable({ title, columns, label, route }) {
   async function fetchItems() {
     try {
       const response = await axios.get(`/api/${route}`);
+      if (!response.success && response.message) {
+        return;
+      }
       setItems(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -172,7 +176,10 @@ export default function Datatable({ title, columns, label, route }) {
   async function deleteItem(id) {
     try {
       setLoading(true);
-      await axios.delete(`/api/${route}/${id}`);
+      const response = await axios.delete(`/api/${route}/${id}`);
+      if (!response.success && response.message) {
+        return;
+      }
       message.success(`${label} excluído(a) com sucesso!`);
       setLoading(false);
       fetchItems();
@@ -207,6 +214,12 @@ export default function Datatable({ title, columns, label, route }) {
           sortedInfo.columnKey === column.key ? sortedInfo.order : null,
         ellipsis: true,
         ...getColumnSearchProps(column.key),
+        render: (text) => {
+          if (moment(text, moment.ISO_8601, true).isValid()) {
+            return moment(text).format("DD/MM/YYYY");
+          }
+          return text;
+        },
       };
     })
     .concat([

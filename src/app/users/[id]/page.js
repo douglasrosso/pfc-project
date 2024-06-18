@@ -31,6 +31,9 @@ export default function EditUser({ params }) {
       setLoading(true);
       if (id) {
         const response = await axios.get(`/api/users/${id}`);
+        if (!response.success && response.message) {
+          return;
+        }
         const userData = response.data.data;
         userData.status = userData.status === "on";
 
@@ -47,7 +50,13 @@ export default function EditUser({ params }) {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      await axios.put(`/api/users/${form.getFieldValue("_id")}`, values);
+      const response = await axios.put(
+        `/api/users/${form.getFieldValue("_id")}`,
+        values
+      );
+      if (!response.success && response.message) {
+        return;
+      }
       message.success("Usuário atualizado com sucesso!");
 
       handleSuccess();

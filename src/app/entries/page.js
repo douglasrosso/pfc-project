@@ -37,6 +37,7 @@ const columns = [
   {
     title: "Status",
     key: "status",
+    width: "7rem",
   },
   {
     title: "Ativo",

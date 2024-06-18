@@ -22,6 +22,9 @@ export default function EditCategory({ params }) {
       if (id) {
         setLoading(true);
         const response = await axios.get(`/api/categories/${id}`);
+        if (!response.success && response.message) {
+          return;
+        }
         const userData = response.data.data;
         form.setFieldsValue(userData);
       }
@@ -34,9 +37,14 @@ export default function EditCategory({ params }) {
 
   const onFinish = async (values) => {
     try {
-      await axios.put(`/api/categories/${form.getFieldValue("_id")}`, values);
+      const response = await axios.put(
+        `/api/categories/${form.getFieldValue("_id")}`,
+        values
+      );
+      if (!response.success && response.message) {
+        return;
+      }
       message.success("Categoria atualizada com sucesso!");
-
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a categoria.");

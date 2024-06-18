@@ -26,7 +26,13 @@ export default function CreateUser() {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      await axios.post("/api/users", { ...values, status: "on" });
+      const response = await axios.post("/api/users", {
+        ...values,
+        status: "on",
+      });
+      if (!response.success && response.message) {
+        return;
+      }
       message.success("Usuário cadastrado com sucesso!");
       handleSuccess();
     } catch (error) {
