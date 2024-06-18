@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
+import { Button, Form, Input, Select, Space, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
@@ -35,10 +35,7 @@ export default function EditCategory({ params }) {
 
   const onFinish = async (values) => {
     try {
-      await api.put(
-        `/api/categories/${form.getFieldValue("_id")}`,
-        values
-      );
+      await api.put(`/api/categories/${form.getFieldValue("_id")}`, values);
       message.success("Categoria atualizada com sucesso!");
       handleSuccess();
     } catch (error) {
@@ -99,9 +96,12 @@ export default function EditCategory({ params }) {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Salvar
-            </Button>
+          <Space>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button href="/categories">Cancelar</Button>
+            </Space>
           </Form.Item>
         </Form>
       )}

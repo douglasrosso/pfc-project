@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Select,
+  Space,
   Spin,
   Switch,
   Typography,
@@ -48,10 +49,7 @@ export default function EditUser({ params }) {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      await api.put(
-        `/api/users/${form.getFieldValue("_id")}`,
-        values
-      );
+      await api.put(`/api/users/${form.getFieldValue("_id")}`, values);
       message.success("Usuário atualizado com sucesso!");
 
       handleSuccess();
@@ -161,9 +159,12 @@ export default function EditUser({ params }) {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Editar usuário
-            </Button>
+          <Space>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button href="/users">Cancelar</Button>
+            </Space>
           </Form.Item>
         </Form>
       )}

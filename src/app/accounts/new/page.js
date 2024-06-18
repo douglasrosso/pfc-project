@@ -2,7 +2,7 @@
 
 import React, { Fragment, useState } from "react";
 import axios from "axios";
-import { Button, Form, Input, message, Spin, Typography } from "antd";
+import { Button, Form, Input, message, Space, Spin, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
@@ -72,9 +72,12 @@ export default function CreateAccount() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Salvar
-            </Button>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button href="/accounts">Cancelar</Button>
+            </Space>
           </Form.Item>
         </Form>
       )}

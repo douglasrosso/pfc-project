@@ -10,6 +10,7 @@ import {
   DatePicker,
   message,
   InputNumber,
+  Space,
 } from "antd";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -234,9 +235,12 @@ export default function EditEntry({ params }) {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Salvar
-        </Button>
+        <Space>
+          <Button type="primary" htmlType="submit" oading={loading}>
+            Salvar
+          </Button>
+          <Button href="/entries">Cancelar</Button>
+        </Space>
       </Form.Item>
     </Form>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import { Button, Form, Input, Spin, Typography, message } from "antd";
+import { Button, Form, Input, Space, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
@@ -33,10 +33,7 @@ export default function EditAccount({ params }) {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await api.put(
-        `/api/accounts/${form.getFieldValue("_id")}`,
-        values
-      );
+      await api.put(`/api/accounts/${form.getFieldValue("_id")}`, values);
       message.success("Conta atualizada com sucesso!");
       handleSuccess();
     } catch (error) {
@@ -94,9 +91,12 @@ export default function EditAccount({ params }) {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Salvar
-            </Button>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button href="/accounts">Cancelar</Button>
+            </Space>
           </Form.Item>
         </Form>
       )}

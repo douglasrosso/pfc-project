@@ -10,6 +10,8 @@ import {
   DatePicker,
   message,
   InputNumber,
+  Space,
+  Flex,
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
@@ -217,9 +219,12 @@ export default function CreateEntry() {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Salvar
-        </Button>
+        <Space>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Salvar
+          </Button>
+          <Button href="/entries">Cancelar</Button>
+        </Space>
       </Form.Item>
     </Form>
   );

@@ -9,6 +9,7 @@ import {
   Input,
   message,
   Select,
+  Space,
   Spin,
   Switch,
   Typography,
@@ -130,9 +131,12 @@ export default function CreateUser() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Cadastrar usuário
-            </Button>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button href="/users">Cancelar</Button>
+            </Space>
           </Form.Item>
         </Form>
       )}
