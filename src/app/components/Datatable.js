@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState, useEffect, Fragment } from "react";
-import axios from "axios";
 import moment from "moment";
 import {
   Spin,
@@ -170,11 +169,6 @@ export default function Datatable({
   async function defaultFetchItems() {
     try {
       setLoading(true);
-      if (data) {
-        setItems(data);
-        setLoading(false);
-        return;
-      }
       const response = await api.get(`/api/${route}`);
       setItems(response.data.data);
       setLoading(false);

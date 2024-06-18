@@ -2,7 +2,6 @@
 
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button, Layout } from "antd";
 import { Menu } from "antd";

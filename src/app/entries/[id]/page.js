@@ -13,7 +13,6 @@ import {
   Space,
 } from "antd";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import moment from "moment";
 import { api } from "@/utils/api";
 

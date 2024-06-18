@@ -1,7 +1,6 @@
 "use client";
 
 import React, { Fragment, useState } from "react";
-import axios from "axios";
 import { Button, Form, Input, Select, Space, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
