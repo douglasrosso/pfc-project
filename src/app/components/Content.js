@@ -1,4 +1,5 @@
-import { Breadcrumb, Layout, theme } from "antd";
+import { ArrowUpOutlined } from "@ant-design/icons";
+import { FloatButton, Layout, theme } from "antd";
 const { Content: ContentAnt } = Layout;
 
 export default function Content({ children }) {
@@ -26,6 +27,7 @@ export default function Content({ children }) {
         }}
       >
         {children}
+        <FloatButton.BackTop icon={<ArrowUpOutlined />} />
       </div>
     </ContentAnt>
   );

@@ -7,6 +7,7 @@ const columns = [
   {
     title: "Tipo",
     key: "type",
+    width: "6rem",
   },
   {
     title: "Categoria",
@@ -19,6 +20,7 @@ const columns = [
   {
     title: "Valor",
     key: "value",
+    width: "7rem",
   },
   {
     title: "Data de Vencimento",
@@ -39,6 +41,7 @@ const columns = [
   {
     title: "Ativo",
     key: "comments",
+    width: "7rem",
   },
 ];
 

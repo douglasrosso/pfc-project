@@ -182,56 +182,62 @@ export default function Datatable({ title, columns, label, route }) {
     }
   }
 
-  const columnsMapped = columns.map((column) => {
-    return {
-      title: column.title,
-      dataIndex: column.key,
-      key: column.key,
-      sorter: (a, b) => {
-        if (
-          typeof a[column.key] === "string" &&
-          typeof b[column.key] === "string"
-        ) {
-          return a[column.key].localeCompare(b[column.key]);
-        } else if (
-          typeof a[column.key] === "number" &&
-          typeof b[column.key] === "number"
-        ) {
-          return a[column.key] - b[column.key];
-        }
-        return 0;
+  const columnsMapped = columns
+    .map((column) => {
+      return {
+        title: column.title,
+        dataIndex: column.key,
+        key: column.key,
+        width: column.width,
+        sorter: (a, b) => {
+          if (
+            typeof a[column.key] === "string" &&
+            typeof b[column.key] === "string"
+          ) {
+            return a[column.key].localeCompare(b[column.key]);
+          } else if (
+            typeof a[column.key] === "number" &&
+            typeof b[column.key] === "number"
+          ) {
+            return a[column.key] - b[column.key];
+          }
+          return 0;
+        },
+        sortOrder:
+          sortedInfo.columnKey === column.key ? sortedInfo.order : null,
+        ellipsis: true,
+        ...getColumnSearchProps(column.key),
+      };
+    })
+    .concat([
+      {
+        title: "Ações",
+        key: "action",
+        width: "5rem",
+        render: (_, record) => (
+          <Space size="middle">
+            <Tooltip placement="left" title={`Editar ${label}`}>
+              <a href={`/${route}/${record._id}`}>
+                <EditOutlined />
+              </a>
+            </Tooltip>
+            <Popconfirm
+              title={`Excluir ${label}`}
+              description={`Você tem certeza que deseja excluir o(a) ${label}?`}
+              onConfirm={handleConfirmClicked(record._id)}
+              okText="Sim"
+              cancelText="Não"
+            >
+              <Tooltip placement="right" title={`Excluir ${label}`}>
+                <a>
+                  <DeleteOutlined style={{ color: "red" }} />
+                </a>
+              </Tooltip>
+            </Popconfirm>
+          </Space>
+        ),
       },
-      sortOrder: sortedInfo.columnKey === column.key ? sortedInfo.order : null,
-      ellipsis: true,
-      ...getColumnSearchProps(column.key),
-    };
-  }).concat([{
-    title: "Ações",
-    key: "action",
-    width: "5rem",
-    render: (_, record) => (
-      <Space size="middle">
-        <Tooltip placement="left" title={`Editar ${label}`}>
-          <a href={`/${route}/${record._id}`}>
-            <EditOutlined />
-          </a>
-        </Tooltip>
-        <Popconfirm
-          title={`Excluir ${label}`}
-          description={`Você tem certeza que deseja excluir o(a) ${label}?`}
-          onConfirm={handleConfirmClicked(record._id)}
-          okText="Sim"
-          cancelText="Não"
-        >
-          <Tooltip placement="right" title={`Excluir ${label}`}>
-            <a>
-              <DeleteOutlined style={{ color: "red" }} />
-            </a>
-          </Tooltip>
-        </Popconfirm>
-      </Space>
-    ),
-  }]);
+    ]);
 
   return (
     <Fragment>

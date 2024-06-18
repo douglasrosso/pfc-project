@@ -56,7 +56,7 @@ export default function Appbar() {
     },
     {
       key: 1,
-      label: "Entradas",
+      label: "Lançamentos",
       onClick: handleNavigateClicked("1"),
     },
     {

@@ -153,24 +153,23 @@ export default function CreateEntry() {
         ]}
       >
         <DatePicker
-          placeholder="Selecione a data de vencimento"
+          placeholder="Selecione a data de pagamento"
           style={{ width: "100%" }}
+          format={{
+            format: "DD/MM/YYYY",
+            type: "mask",
+          }}
         />
       </Form.Item>
 
-      <Form.Item
-        name="payment_date"
-        label="Data de Pagamento"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione a data de pagamento!",
-          },
-        ]}
-      >
+      <Form.Item name="payment_date" label="Data de Pagamento">
         <DatePicker
           placeholder="Selecione a data de pagamento"
           style={{ width: "100%" }}
+          format={{
+            format: "DD/MM/YYYY",
+            type: "mask",
+          }}
         />
       </Form.Item>
 

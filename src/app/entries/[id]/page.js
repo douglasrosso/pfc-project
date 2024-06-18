@@ -184,12 +184,6 @@ export default function EditEntry({ params }) {
       <Form.Item
         name="payment_date"
         label="Data de Pagamento"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione a data de pagamento!",
-          },
-        ]}
       >
         <DatePicker
           placeholder="Selecione a data de pagamento"
