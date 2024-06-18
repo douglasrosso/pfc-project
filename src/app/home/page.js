@@ -5,7 +5,6 @@ import Datatable from "../components/Datatable";
 import { Card, Col, Row, Spin, Statistic, message } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "@/utils/api";
-import moment from "moment";
 
 const columns = [
   {
@@ -59,33 +58,15 @@ export default function Home() {
     fetchItems();
   }, []);
 
+  function updateHomeInfo({ expiredEntries, revenue, expense }) {
+    setItems(expiredEntries);
+    setStatistic({ revenue, expense });
+  }
+
   async function fetchItems() {
     try {
-      const response = await api.get("/api/entries");
-      const data = response.data.data;
-
-      const filteredData = data
-        .filter((entry) => {
-          const dueDate = moment(entry.due_date);
-          return dueDate.isSameOrBefore(moment(), "day");
-        })
-        .sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
-
-      setItems(filteredData);
-
-      const totalItems = data.length;
-      const totalRevenue = data.filter(
-        (item) => item.type === "Receita"
-      ).length;
-      const totalExpense = data.filter(
-        (item) => item.type === "Despesa"
-      ).length;
-
-      const revenuePercentage = (totalRevenue / totalItems) * 100;
-      const expensePercentage = (totalExpense / totalItems) * 100;
-
-      setStatistic({ revenue: revenuePercentage, expense: expensePercentage });
-
+      const response = await api.get("/api/entries/expired");
+      updateHomeInfo(response.data.data);
       setLoading(false);
     } catch (error) {
       message.error("Erro ao carregar a lista.");
@@ -131,12 +112,14 @@ export default function Home() {
           </Row>
 
           <Datatable
-            columns={columns}
-            onDelete={fetchItems}
-            data={items}
+            hideNewButton
             title="Lançamentos do dia"
             label="lançamento"
             route="entries"
+            columns={columns}
+            onDelete={fetchItems}
+            data={items}
+            customFetch={fetchItems}
           />
         </Fragment>
       )}

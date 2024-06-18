@@ -24,9 +24,18 @@ import Highlighter from "react-highlight-words";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
-export default function Datatable({ title, columns, label, route, data, onDelete }) {
+export default function Datatable({
+  title,
+  columns,
+  label,
+  route,
+  data,
+  onDelete,
+  hideNewButton,
+  customFetch,
+}) {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
@@ -146,10 +155,6 @@ export default function Datatable({ title, columns, label, route, data, onDelete
       ),
   });
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
   const handleConfirmClicked = (id) => {
     return () => {
       deleteItem(id);
@@ -160,8 +165,11 @@ export default function Datatable({ title, columns, label, route, data, onDelete
     router.push(`/${route}/new`);
   }
 
-  async function fetchItems() {
+  const fetchItems = customFetch || defaultFetchItems;
+
+  async function defaultFetchItems() {
     try {
+      setLoading(true);
       if (data) {
         setItems(data);
         setLoading(false);
@@ -256,6 +264,10 @@ export default function Datatable({ title, columns, label, route, data, onDelete
       },
     ]);
 
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   return (
     <Fragment>
       {loading ? (
@@ -269,7 +281,7 @@ export default function Datatable({ title, columns, label, route, data, onDelete
           onChange={handleTableChange}
           loading={loading}
           columns={columnsMapped}
-          dataSource={items.map((item) => ({
+          dataSource={(data ?? items).map((item) => ({
             ...item,
             key: item._id,
           }))}
@@ -289,13 +301,15 @@ export default function Datatable({ title, columns, label, route, data, onDelete
               >
                 {title}
               </Typography.Title>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={handleNewClicked}
-              >
-                Novo
-              </Button>
+              {!hideNewButton && (
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={handleNewClicked}
+                >
+                  Novo
+                </Button>
+              )}
             </Space>
           )}
         />
