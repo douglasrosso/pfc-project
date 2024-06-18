@@ -12,7 +12,7 @@ import {
   InputNumber,
 } from "antd";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -31,10 +31,7 @@ export default function CreateEntry() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("/api/categories");
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get("/api/categories");
       setCategories(response.data.data);
     } catch (error) {
       message.error("Erro ao carregar as categorias.");
@@ -43,10 +40,7 @@ export default function CreateEntry() {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axios.get("/api/accounts");
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get("/api/accounts");
       setAccounts(response.data.data);
     } catch (error) {
       message.error("Erro ao carregar as contas.");
@@ -66,13 +60,10 @@ export default function CreateEntry() {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/entries", {
+      await api.post("/api/entries", {
         ...values,
         comments: "on",
       });
-      if (!response.success && response.message) {
-        return;
-      }
       message.success("Entrada criada com sucesso!");
       handleSuccess();
     } catch (error) {

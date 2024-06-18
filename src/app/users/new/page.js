@@ -14,6 +14,7 @@ import {
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -26,13 +27,10 @@ export default function CreateUser() {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      const response = await axios.post("/api/users", {
+      await api.post("/api/users", {
         ...values,
         status: "on",
       });
-      if (!response.success && response.message) {
-        return;
-      }
       message.success("Usuário cadastrado com sucesso!");
       handleSuccess();
     } catch (error) {

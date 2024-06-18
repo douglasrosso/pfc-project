@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button, Layout } from "antd";
 import { Menu } from "antd";
 import { ExitToAppOutlined } from "@mui/icons-material";
+import { api } from "@/utils/api";
 
 const { Header } = Layout;
 
@@ -15,7 +16,7 @@ export default function Appbar() {
   const { setIsAuthenticated } = useContext(AuthContext);
 
   async function handleExitClicked() {
-    const response = await axios.get("/api/logout");
+    const response = await api.get("/api/logout");
 
     if (response.data.success) {
       setIsAuthenticated(false);

@@ -13,6 +13,7 @@ import {
   message,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -30,10 +31,7 @@ export default function EditUser({ params }) {
     try {
       setLoading(true);
       if (id) {
-        const response = await axios.get(`/api/users/${id}`);
-        if (!response.success && response.message) {
-          return;
-        }
+        const response = await api.get(`/api/users/${id}`);
         const userData = response.data.data;
         userData.status = userData.status === "on";
 
@@ -50,13 +48,10 @@ export default function EditUser({ params }) {
     try {
       setLoading(true);
       values.status = values.status ? "on" : "off";
-      const response = await axios.put(
+      await api.put(
         `/api/users/${form.getFieldValue("_id")}`,
         values
       );
-      if (!response.success && response.message) {
-        return;
-      }
       message.success("Usuário atualizado com sucesso!");
 
       handleSuccess();

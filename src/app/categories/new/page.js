@@ -4,6 +4,7 @@ import React, { Fragment, useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -15,10 +16,7 @@ export default function CreateCategory() {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/categories", values);
-      if (!response.success && response.message) {
-        return;
-      }
+      await api.post("/api/categories", values);
       message.success("Categoria criada com sucesso!");
       handleSuccess();
     } catch (error) {

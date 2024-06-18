@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 export default function Datatable({ title, columns, label, route }) {
   const [items, setItems] = useState([]);
@@ -161,10 +162,7 @@ export default function Datatable({ title, columns, label, route }) {
 
   async function fetchItems() {
     try {
-      const response = await axios.get(`/api/${route}`);
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get(`/api/${route}`);
       setItems(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -176,10 +174,7 @@ export default function Datatable({ title, columns, label, route }) {
   async function deleteItem(id) {
     try {
       setLoading(true);
-      const response = await axios.delete(`/api/${route}/${id}`);
-      if (!response.success && response.message) {
-        return;
-      }
+      await api.delete(`/api/${route}/${id}`);
       message.success(`${label} excluído(a) com sucesso!`);
       setLoading(false);
       fetchItems();

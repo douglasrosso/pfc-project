@@ -4,6 +4,7 @@ import React, { Fragment, useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, message, Spin, Typography } from "antd";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 export default function CreateAccount() {
   const [loading, setLoading] = useState(false);
@@ -13,10 +14,7 @@ export default function CreateAccount() {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/accounts", values);
-      if (!response.success && response.message) {
-        return;
-      }
+      await api.post("/api/accounts", values);
       message.success("Conta cadastrada com sucesso!");
       handleSuccess();
     } catch (error) {

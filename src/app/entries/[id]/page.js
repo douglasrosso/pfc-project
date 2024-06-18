@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import moment from "moment";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -37,10 +38,7 @@ export default function EditEntry({ params }) {
   async function fetchEntry() {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/entries/${id}`);
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get(`/api/entries/${id}`);
       const entryData = response.data.data;
       entryData.due_date = moment(entryData.due_date);
       entryData.payment_date = moment(entryData.payment_date);
@@ -54,10 +52,7 @@ export default function EditEntry({ params }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("/api/categories");
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get("/api/categories");
       setCategories(response.data.data);
     } catch (error) {
       message.error("Erro ao carregar as categorias.");
@@ -66,10 +61,7 @@ export default function EditEntry({ params }) {
 
   const fetchAccounts = async () => {
     try {
-      const response = await axios.get("/api/accounts");
-      if (!response.success && response.message) {
-        return;
-      }
+      const response = await api.get("/api/accounts");
       setAccounts(response.data.data);
     } catch (error) {
       message.error("Erro ao carregar as contas.");
@@ -91,10 +83,7 @@ export default function EditEntry({ params }) {
       setLoading(true);
       values.due_date = values.due_date.toISOString();
       values.payment_date = values.payment_date.toISOString();
-      const response = await axios.put(`/api/entries/${id}`, values);
-      if (!response.success && response.message) {
-        return;
-      }
+      await api.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
       handleSuccess();
     } catch (error) {

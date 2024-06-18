@@ -4,6 +4,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
+import { api } from "@/utils/api";
 
 const { Option } = Select;
 
@@ -21,10 +22,7 @@ export default function EditCategory({ params }) {
     try {
       if (id) {
         setLoading(true);
-        const response = await axios.get(`/api/categories/${id}`);
-        if (!response.success && response.message) {
-          return;
-        }
+        const response = await api.get(`/api/categories/${id}`);
         const userData = response.data.data;
         form.setFieldsValue(userData);
       }
@@ -37,13 +35,10 @@ export default function EditCategory({ params }) {
 
   const onFinish = async (values) => {
     try {
-      const response = await axios.put(
+      await api.put(
         `/api/categories/${form.getFieldValue("_id")}`,
         values
       );
-      if (!response.success && response.message) {
-        return;
-      }
       message.success("Categoria atualizada com sucesso!");
       handleSuccess();
     } catch (error) {
