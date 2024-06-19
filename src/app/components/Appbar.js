@@ -23,7 +23,7 @@ export default function Appbar() {
   useEffect(() => {
     const messageParam = params?.get?.('message');
     if (messageParam) {
-      message.warning(messageParam);
+      message.error(messageParam);
       router.replace('/home')
       router.refresh();
     }

@@ -1,7 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 
-export const api = axios.create({ baseURL: "http://localhost:3000" });
+export const api = axios.create({ baseURL: process.env.APP_URL });
 
 api.interceptors.response.use(
   function (response) {

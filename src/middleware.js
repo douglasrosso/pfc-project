@@ -5,7 +5,7 @@ const isRESTManipulationMethod = (request) =>
 const isAPIRoute = (request) => request.nextUrl.pathname.startsWith("/api");
 const isNormalUser = (user) => user?.level?.toLowerCase() !== "admin";
 const isRegisterRoute = (request) =>
-  request.nextUrl.pathname.includes("/new") && !isAPIRoute(request);
+  request.nextUrl.pathname.includes("/new");
 const hasNumberOnPath = (request) => {
   const hasNumberRegex = new RegExp(/\d/);
   const paths = request.nextUrl.pathname.split("/");
@@ -18,6 +18,7 @@ export async function middleware(request) {
 
   if (
     isNormalUser(user) &&
+    !isAPIRoute(request) &&
     (isRegisterRoute(request) || hasNumberOnPath(request))
   ) {
     const url = new URL("/home", request.url);
