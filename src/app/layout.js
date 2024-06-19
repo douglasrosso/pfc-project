@@ -8,6 +8,7 @@ import { ConfigProvider, Layout } from "antd";
 import "@/styles/globals.css";
 import Appbar from "./components/Appbar";
 import Content from "./components/Content";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,8 +27,10 @@ export default function RootLayout({ children }) {
           <ConfigProvider locale={ptBR}>
             <AntdRegistry>
               <Main>
-                <Appbar />
-                <Content>{children}</Content>
+                <Suspense>
+                  <Appbar />
+                  <Content>{children}</Content>
+                </Suspense>
               </Main>
             </AntdRegistry>
           </ConfigProvider>
