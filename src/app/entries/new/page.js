@@ -144,7 +144,28 @@ export default function CreateEntry() {
           },
         ]}
       >
-        <InputNumber placeholder="Insira o valor" style={{ width: "100%" }} />
+        <InputNumber
+          formatter={(value) => {
+            value = value.replace(/\D/g, "");
+            value = Number(value) / 100;
+
+            if (isNaN(value) || value === "") {
+              value = 0;
+            }
+
+            const formatter = new Intl.NumberFormat("pt-BR", {
+              minimumFractionDigits: 2,
+            });
+
+            form.setFieldValue("value", formatter.format(value));
+            return formatter.format(value);
+          }}
+          parser={(value) => {
+            return value.replace(/\D/g, "");
+          }}
+          placeholder="Insira o valor"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
       <Form.Item

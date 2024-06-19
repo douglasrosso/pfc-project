@@ -29,7 +29,6 @@ export default function Datatable({
   label,
   route,
   data,
-  onDelete,
   hideNewButton,
   customFetch,
 }) {
@@ -184,10 +183,6 @@ export default function Datatable({
       await api.delete(`/api/${route}/${id}`);
       message.success(`${label} excluído(a) com sucesso!`);
       setLoading(false);
-      if (data) {
-        onDelete?.();
-        return;
-      }
       fetchItems();
     } catch (error) {
       message.error(`Erro ao excluir o(a) ${label}.`);

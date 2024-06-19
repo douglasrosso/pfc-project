@@ -1,18 +1,27 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Button, Layout } from "antd";
+import { Avatar, Badge, Button, Layout, Popover, Space, message } from "antd";
 import { Menu } from "antd";
 import { ExitToAppOutlined } from "@mui/icons-material";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "../hooks/useExpiredInfo";
+import { UserOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
 
 export default function Appbar() {
   const router = useRouter();
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const { setIsAuthenticated, isAuthenticated, expiredInfo } =
+    useContext(AuthContext);
+
+  const [fetchItems] = useExpiredInfo();
+
+  useEffect(() => {
+    if (!expiredInfo) fetchItems();
+  }, []);
 
   async function handleExitClicked() {
     const response = await api.get("/api/logout");
@@ -76,15 +85,34 @@ export default function Appbar() {
     },
   ];
 
-  const { isAuthenticated } = useContext(AuthContext);
   return isAuthenticated ? (
     <Header
       style={{
         display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
+        gap: 40,
       }}
     >
-      <div className="demo-logo" />
+      <Popover
+        trigger="click"
+        content={
+          <div>
+            <p>teste</p>
+          </div>
+        }
+      >
+        <a>
+          <Badge count={expiredInfo?.expiredEntriesCount ?? 0}>
+            <Avatar
+              style={{
+                backgroundColor: "#87d068",
+              }}
+              icon={<UserOutlined />}
+            />
+          </Badge>
+        </a>
+      </Popover>
       <Menu
         theme="dark"
         mode="horizontal"
@@ -94,6 +122,7 @@ export default function Appbar() {
           minWidth: 0,
         }}
       />
+
       <Button
         type="link"
         style={{ color: "#ffffffa6" }}

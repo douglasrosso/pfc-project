@@ -40,8 +40,9 @@ export default function EditEntry({ params }) {
       setLoading(true);
       const response = await api.get(`/api/entries/${id}`);
       const entryData = response.data.data;
-      entryData.due_date = moment(entryData.due_date);
-      entryData.payment_date = moment(entryData.payment_date);
+      if (entryData.due_date) entryData.due_date = moment(entryData.due_date);
+      if (entryData.payment_date)
+        entryData.payment_date = moment(entryData.payment_date);
       form.setFieldsValue(entryData);
     } catch (error) {
       message.error("Erro ao carregar a entrada.");
@@ -76,13 +77,18 @@ export default function EditEntry({ params }) {
       setFilteredCategories(filtered);
       form.setFieldsValue({ categories: null });
     }
+
+    if (changedValues.payment_date && form.getFieldError("payment_date")) {
+      form.setFields([{ name: "payment_date", errors: [] }]);
+    }
   };
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      values.due_date = values.due_date.toISOString();
-      values.payment_date = values.payment_date.toISOString();
+      if (values.due_date) values.due_date = values.due_date.toISOString();
+      if (values.payment_date)
+        values.payment_date = values.payment_date.toISOString();
       await api.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
       handleSuccess();
@@ -163,7 +169,28 @@ export default function EditEntry({ params }) {
           },
         ]}
       >
-        <InputNumber placeholder="Insira o valor" style={{ width: "100%" }} />
+        <InputNumber
+          formatter={(value) => {
+            value = value.replace(/\D/g, "");
+            value = Number(value) / 100;
+
+            if (isNaN(value) || value === "") {
+              value = 0;
+            }
+
+            const formatter = new Intl.NumberFormat("pt-BR", {
+              minimumFractionDigits: 2,
+            });
+
+            form.setFieldValue("value", formatter.format(value));
+            return formatter.format(value);
+          }}
+          parser={(value) => {
+            return value.replace(/\D/g, "");
+          }}
+          placeholder="Insira o valor"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
 
       <Form.Item
@@ -184,6 +211,7 @@ export default function EditEntry({ params }) {
 
       <Form.Item name="payment_date" label="Data de Pagamento">
         <DatePicker
+          disabled={!!form.getFieldValue("payment_date") && form.getFieldValue("status") === "Paga"}
           placeholder="Selecione a data de pagamento"
           style={{ width: "100%" }}
         />
@@ -219,6 +247,17 @@ export default function EditEntry({ params }) {
             required: true,
             message: "Por favor, selecione o status!",
           },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (value === "Paga" && !getFieldValue("payment_date")) {
+                return Promise.reject(
+                  'Por favor, informe a data de pagamento para marcar como "Paga".'
+                );
+              }
+              return Promise.resolve();
+            },
+            dependencies: ["payment_date"],
+          }),
         ]}
       >
         <Select placeholder="Selecione o status">

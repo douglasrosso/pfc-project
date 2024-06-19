@@ -1,10 +1,12 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import Datatable from "../components/Datatable";
 import { Card, Col, Row, Spin, Statistic, message } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { api } from "@/utils/api";
+import { AuthContext } from "../contexts/AuthContext";
+import { useExpiredInfo } from "../hooks/useExpiredInfo";
 
 const columns = [
   {
@@ -50,79 +52,49 @@ const columns = [
 ];
 
 export default function Home() {
-  const [items, setItems] = useState([]);
-  const [statistic, setStatistic] = useState({ revenue: 0, expense: 0 });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  function updateHomeInfo({ expiredEntries, revenue, expense }) {
-    setItems(expiredEntries);
-    setStatistic({ revenue, expense });
-  }
-
-  async function fetchItems() {
-    try {
-      const response = await api.get("/api/entries/expired");
-      updateHomeInfo(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      message.error("Erro ao carregar a lista.");
-      setLoading(false);
-    }
-  }
+  const { expiredInfo } = useContext(AuthContext);
+  const [fetchItems] = useExpiredInfo();
 
   return (
     <Fragment>
       <h1>Home</h1>
-      {loading ? (
-        <Spin
-          size="large"
-          style={{ justifyContent: "center", display: "flex" }}
-        />
-      ) : (
-        <Fragment>
-          <Row gutter={16} style={{ marginBottom: 2 }}>
-            <Col span={12}>
-              <Card bordered={false}>
-                <Statistic
-                  title="Receitas"
-                  value={statistic.revenue}
-                  precision={2}
-                  valueStyle={{ color: "#3f8600" }}
-                  prefix={<ArrowUpOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card bordered={false}>
-                <Statistic
-                  title="Despesas"
-                  value={statistic.expense}
-                  precision={2}
-                  valueStyle={{ color: "#cf1322" }}
-                  prefix={<ArrowDownOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-          </Row>
 
-          <Datatable
-            hideNewButton
-            title="Lançamentos do dia"
-            label="lançamento"
-            route="entries"
-            columns={columns}
-            onDelete={fetchItems}
-            data={items}
-            customFetch={fetchItems}
-          />
-        </Fragment>
-      )}
+      <Row gutter={16} style={{ marginBottom: 2 }}>
+        <Col span={12}>
+          <Card bordered={false}>
+            <Statistic
+              title="Receitas"
+              value={expiredInfo?.revenue ?? 0}
+              precision={2}
+              valueStyle={{ color: "#3f8600" }}
+              prefix={<ArrowUpOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card bordered={false}>
+            <Statistic
+              title="Despesas"
+              value={expiredInfo?.expense ?? 0}
+              precision={2}
+              valueStyle={{ color: "#cf1322" }}
+              prefix={<ArrowDownOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Datatable
+        hideNewButton
+        title="Lançamentos do dia"
+        label="lançamento"
+        route="entries"
+        columns={columns}
+        data={expiredInfo?.expiredEntries ?? []}
+        customFetch={fetchItems}
+      />
     </Fragment>
   );
 }
