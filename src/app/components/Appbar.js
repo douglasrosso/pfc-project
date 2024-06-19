@@ -1,27 +1,40 @@
 "use client";
 
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { useRouter } from "next/navigation";
-import { Avatar, Badge, Button, Layout, Popover, Space, message } from "antd";
-import { Menu } from "antd";
-import { ExitToAppOutlined } from "@mui/icons-material";
-import { api } from "@/utils/api";
+import { Avatar, Badge, Button, Layout, Popover, message } from "antd";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useExpiredInfo } from "../hooks/useExpiredInfo";
+import { ExitToAppOutlined } from "@mui/icons-material";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext, useEffect, useRef } from "react";
 import { UserOutlined } from "@ant-design/icons";
+import { api } from "@/utils/api";
+import { Menu } from "antd";
 
 const { Header } = Layout;
 
 export default function Appbar() {
   const router = useRouter();
+  const params = useSearchParams();
+  const [fetchItems] = useExpiredInfo();
   const { setIsAuthenticated, isAuthenticated, expiredInfo } =
     useContext(AuthContext);
-
-  const [fetchItems] = useExpiredInfo();
+  const isFirstTime = useRef(true);
 
   useEffect(() => {
-    if (!expiredInfo) fetchItems();
-  }, []);
+    const messageParam = params?.get?.('message');
+    if (messageParam) {
+      message.warning(messageParam);
+      router.replace('/home')
+      router.refresh();
+    }
+  }, [params, router]);
+
+  useEffect(() => {
+    if (isFirstTime.current && !expiredInfo) {
+      isFirstTime.current = false;
+      fetchItems();
+    }
+  }, [isFirstTime, expiredInfo, fetchItems]);
 
   async function handleExitClicked() {
     const response = await api.get("/api/logout");

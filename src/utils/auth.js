@@ -2,19 +2,19 @@ import jwt from "jsonwebtoken";
 import cookie from "cookie";
 import * as jose from "jose";
 
-export async function isTokenValid(token) {
+export async function getUserFromToken(token) {
   const encodedSecret = new TextEncoder().encode(process.env.SECRET_KEY);
-  let result = false;
+  let result = null;
 
   if (!token) {
-    result = false;
+    result = null;
   }
 
   try {
     const decoded = await jose.jwtVerify(token, encodedSecret);
-    result = !!decoded?.payload?.user;
+    result = decoded?.payload?.user;
   } catch {
-    result = false;
+    result = null;
   }
 
   return result;

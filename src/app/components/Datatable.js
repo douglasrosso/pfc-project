@@ -39,6 +39,7 @@ export default function Datatable({
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const isFirstTime = useRef(true);
 
   const handleTableChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
@@ -180,10 +181,12 @@ export default function Datatable({
   async function deleteItem(id) {
     try {
       setLoading(true);
-      await api.delete(`/api/${route}/${id}`);
-      message.success(`${label} excluído(a) com sucesso!`);
+      const response = await api.delete(`/api/${route}/${id}`);
       setLoading(false);
-      fetchItems();
+      if(response.data.success) {
+        message.success(`${label} excluído(a) com sucesso!`);
+        fetchItems();        
+      }
     } catch (error) {
       message.error(`Erro ao excluir o(a) ${label}.`);
       setLoading(false);
@@ -254,8 +257,11 @@ export default function Datatable({
     ]);
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    if (isFirstTime.current && !customFetch) {
+      isFirstTime.current = false;
+      fetchItems();
+    }
+  }, [customFetch, isFirstTime, fetchItems]);
 
   return (
     <Fragment>

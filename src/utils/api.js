@@ -5,8 +5,8 @@ export const api = axios.create({ baseURL: "http://localhost:3000" });
 
 api.interceptors.response.use(
   function (response) {
-    if (!response.success && response.message) {
-      message.error(response.message);
+    if (!response.data.success && response.data.message) {
+      message.error(response.data.message);
     }
     return response;
   },

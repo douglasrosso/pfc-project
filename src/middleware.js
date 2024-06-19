@@ -1,11 +1,32 @@
-import { isTokenValid } from "./utils/auth";
+import { getUserFromToken } from "./utils/auth";
+
+const isRESTManipulationMethod = (request) =>
+  ["POST", "PUT", "DELETE"].includes(request.method);
+const isAPIRoute = (request) => request.nextUrl.pathname.startsWith("/api");
+const isNormalUser = (user) => user?.level?.toLowerCase() !== "admin";
+const isRegisterRoute = (request) =>
+  request.nextUrl.pathname.includes("/new") && !isAPIRoute(request);
+const hasNumberOnPath = (request) => {
+  const hasNumberRegex = new RegExp(/\d/);
+  const paths = request.nextUrl.pathname.split("/");
+  return hasNumberRegex.test(paths.at(-1));
+};
 
 export async function middleware(request) {
   const authToken = request.cookies.get("auth")?.value;
-  const isAuthenticated = await isTokenValid(authToken);
+  const user = await getUserFromToken(authToken);
+
+  if (
+    isNormalUser(user) &&
+    (isRegisterRoute(request) || hasNumberOnPath(request))
+  ) {
+    const url = new URL("/home", request.url);
+    url.searchParams.set("message", "Você não possui permissão!");
+    return Response.redirect(url);
+  }
 
   if (request.nextUrl.pathname.startsWith("/api")) {
-    if (!isAuthenticated && request.nextUrl.pathname.startsWith("/api")) {
+    if (!user && request.nextUrl.pathname.startsWith("/api")) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -16,11 +37,23 @@ export async function middleware(request) {
         }
       );
     }
+    if (
+      isNormalUser(user) &&
+      (isRESTManipulationMethod(request) || hasNumberOnPath(request))
+    ) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Você nâo possui permissão!",
+        }),
+        { status: 200 }
+      );
+    }
   } else {
-    if (!isAuthenticated && request.nextUrl.pathname !== "/") {
+    if (!user && request.nextUrl.pathname !== "/") {
       return Response.redirect(new URL("/", request.url));
     }
-    if (isAuthenticated && request.nextUrl.pathname === "/") {
+    if (user && request.nextUrl.pathname === "/") {
       return Response.redirect(new URL("/home", request.url));
     }
   }
