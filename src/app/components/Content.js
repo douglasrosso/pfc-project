@@ -57,12 +57,11 @@ export default function Content({ children }) {
       <div
         style={{
           background: colorBgContainer,
-          marginTop: "30px !important",
-          padding: "30px 24px",
+          marginTop: "20px !important",
+          padding: "10px 24px",
           minHeight: 200,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
           justifyContent: "center",
           borderRadius: borderRadiusLG,
         }}

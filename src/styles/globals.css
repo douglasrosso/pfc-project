@@ -20,3 +20,7 @@ body > main > div > main {
 .ant-table-pagination-right {
   margin-top: 20px !important;
 }
+
+h2, h1 {
+  margin: 0;
+}

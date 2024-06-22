@@ -284,14 +284,7 @@ export default function Datatable({
             alignItems: "center",
           }}
         >
-          <Typography.Title
-            level={2}
-            style={{
-              marginBottom: 20,
-            }}
-          >
-            {title}
-          </Typography.Title>
+          <Typography.Title level={2}>{title}</Typography.Title>
           {!hideNewButton && (
             <Button
               type="primary"
