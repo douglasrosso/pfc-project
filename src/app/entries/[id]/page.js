@@ -290,7 +290,7 @@ export default function EditEntry({ params }) {
 
       <Form.Item>
         <Space>
-          <Button type="primary" htmlType="submit" oading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading}>
             Salvar
           </Button>
           <Button href="/entries">Cancelar</Button>
