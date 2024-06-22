@@ -2,27 +2,36 @@ import connectDB from "@/db/connect";
 import Entry from "@/models/Entry";
 
 function getTimestamp(date) {
-  if (date) {
-    const formattedDate = new Date(date.substring(0, 10)).getTime();
-    return formattedDate;
-  }
-  return null;
+  if (!date) return null;
+
+  return new Date(date.substring(0, 10)).getTime();
 }
 
 function sortByDueDate(a, b) {
   return getTimestamp(a.due_date) - getTimestamp(b.due_date);
 }
 
+function isDate(date1) {
+  return {
+    greaterThan: (date2) => {
+      return date1 > date2;
+    },
+    smallerThan: (date2) => {
+      return date1 < date2;
+    },
+  };
+}
+
 export async function getExpirationDateMiddleware() {
   await connectDB();
   const entries = await Entry.find();
-  const today = new Date().getTime();
+  const today = getTimestamp(new Date().toISOString());
 
   const expiredEntries = entries
     .filter(
       (e) =>
         getTimestamp(e.due_date) <= today &&
-        getTimestamp(e.payment_date) <= today
+        (!getTimestamp(e.payment_date) || getTimestamp(e.payment_date) > today)
     )
     .sort(sortByDueDate);
 
@@ -36,14 +45,14 @@ export async function getExpirationDateMiddleware() {
   const revenuePercentage = (totalRevenue / expiredEntries.length) * 100;
   const expensePercentage = (totalExpense / expiredEntries.length) * 100;
 
-  const { pastDueReleases, releasesOfTheDay } = entries.reduce(
+  const { pastDueReleases, releasesOfTheDay } = expiredEntries.reduce(
     (acc, e) => {
       const dueDate = getTimestamp(e.due_date);
       const paymentDate = getTimestamp(e.payment_date);
 
-      if (dueDate === today && paymentDate === today) {
+      if (dueDate === today && (!paymentDate || paymentDate > today)) {
         acc.releasesOfTheDay.push(e);
-      } else if (dueDate < today && paymentDate <= today) {
+      } else if (dueDate < today && (!paymentDate || paymentDate > today)) {
         acc.pastDueReleases.push(e);
       }
 

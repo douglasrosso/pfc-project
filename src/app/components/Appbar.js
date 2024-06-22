@@ -127,7 +127,7 @@ export default function Appbar() {
                 }}
               />
               <p style={{ margin: 0, color: "#CF1322" }}>
-                Lançamentos vencidos:{" "}
+                Lançamentos em atraso:{" "}
                 <strong>
                   {expiredInfo?.pastDueReleasesSorted.length ?? 0}{" "}
                 </strong>

@@ -25,10 +25,12 @@ const columns = [
   {
     title: "Data de Vencimento",
     key: "due_date",
+    width: "13rem",
   },
   {
     title: "Data de Pagamento",
     key: "payment_date",
+    width: "13rem",
   },
   {
     title: "Conta",

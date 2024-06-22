@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -27,6 +28,7 @@ export default function EditEntry({ params }) {
   const [categories, setCategories] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
+  const [fetchItems] = useExpiredInfo();
 
   useEffect(() => {
     if (id) {
@@ -92,6 +94,7 @@ export default function EditEntry({ params }) {
         values.payment_date = values.payment_date.toISOString();
       await api.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a entrada.");

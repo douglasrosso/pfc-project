@@ -1,6 +1,14 @@
 "use client";
 
-import { Form, Input, Button, notification, Checkbox } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  notification,
+  Checkbox,
+  Flex,
+  QRCode,
+} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Fragment, useContext, useState } from "react";
@@ -33,8 +41,8 @@ export default function Home() {
   };
   return (
     <Fragment>
-      <h1>Login</h1>
       <Form name="login" onFinish={onFinish} initialValues={{ remember: true }}>
+        <h1>Login</h1>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Por favor, insira o usuário!" }]}
@@ -55,7 +63,6 @@ export default function Home() {
           name="remember"
           valuePropName="checked"
           wrapperCol={{
-            offset: 8,
             span: 16,
           }}
         >

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   Form,
@@ -16,6 +16,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -26,6 +27,7 @@ export default function CreateEntry() {
   const [accounts, setAccounts] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const router = useRouter();
+  const [fetchItems] = useExpiredInfo();
 
   useEffect(() => {
     fetchCategories();
@@ -68,6 +70,7 @@ export default function CreateEntry() {
         comments: "on",
       });
       message.success("Entrada criada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao criar a entrada.");

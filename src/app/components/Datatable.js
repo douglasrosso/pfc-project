@@ -200,6 +200,7 @@ export default function Datatable({
         dataIndex: column.key,
         key: column.key,
         width: column.width,
+        ellipsis: true,
         sorter: (a, b) => {
           if (
             typeof a[column.key] === "string" &&

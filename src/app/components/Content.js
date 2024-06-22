@@ -1,18 +1,24 @@
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { FloatButton, Layout, theme } from "antd";
-const { Content: ContentAnt } = Layout;
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext } from "react";
+const { Content: ContentAntD } = Layout;
 
 export default function Content({ children }) {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
-    <ContentAnt
+    <ContentAntD
       style={{
         padding: "30px 48px 48px",
         backgroundColor: "#F8F8F8",
         boxShadow: "inset rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: !isAuthenticated && "center",
       }}
     >
       <div
@@ -26,11 +32,12 @@ export default function Content({ children }) {
           flexDirection: "column",
           justifyContent: "center",
           borderRadius: borderRadiusLG,
+          width: !isAuthenticated && 400,
         }}
       >
         {children}
         <FloatButton.BackTop icon={<ArrowUpOutlined />} />
       </div>
-    </ContentAnt>
+    </ContentAntD>
   );
 }

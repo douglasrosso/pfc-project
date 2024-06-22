@@ -9,6 +9,7 @@ import "@/styles/globals.css";
 import Appbar from "./components/Appbar";
 import Content from "./components/Content";
 import { Suspense } from "react";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
                 <Suspense>
                   <Appbar />
                   <Content>{children}</Content>
+                  <Footer />
                 </Suspense>
               </Main>
             </AntdRegistry>
