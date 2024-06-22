@@ -7,7 +7,6 @@ import {
   Input,
   Select,
   Space,
-  Spin,
   Switch,
   Typography,
   message,
@@ -66,7 +65,12 @@ export default function EditUser({ params }) {
   };
 
   return (
-    <Fragment>
+    <Form
+      form={form}
+      initialValues={form}
+      onFinish={onFinish}
+      layout="vertical"
+    >
       <Typography.Title
         level={2}
         style={{
@@ -75,100 +79,86 @@ export default function EditUser({ params }) {
       >
         Edição Cadastral
       </Typography.Title>
-      {loading ? (
-        <Spin
-          size="large"
-          style={{ justifyContent: "center", display: "flex", margin: 30 }}
-        />
-      ) : (
-        <Form
-          form={form}
-          initialValues={form}
-          onFinish={onFinish}
-          layout="vertical"
-        >
-          <Form.Item
-            name="name"
-            label="Nome"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira o nome do usuário!",
-              },
-            ]}
-          >
-            <Input placeholder="Insira o nome do usuário" />
-          </Form.Item>
+      <Form.Item
+        name="name"
+        label="Nome"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, insira o nome do usuário!",
+          },
+        ]}
+      >
+        <Input placeholder="Insira o nome do usuário" />
+      </Form.Item>
 
-          <Form.Item
-            name="email"
-            label="E-mail"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira o e-mail do usuário!",
-              },
-            ]}
-          >
-            <Input placeholder="Insira o e-mail do usuário" />
-          </Form.Item>
+      <Form.Item
+        name="email"
+        label="E-mail"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, insira o e-mail do usuário!",
+          },
+        ]}
+      >
+        <Input placeholder="Insira o e-mail do usuário" />
+      </Form.Item>
 
-          <Form.Item
-            name="user"
-            label="Usuário"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira o nome de usuário!",
-              },
-            ]}
-          >
-            <Input placeholder="Insira o nome de usuário" />
-          </Form.Item>
+      <Form.Item
+        name="user"
+        label="Usuário"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, insira o nome de usuário!",
+          },
+        ]}
+      >
+        <Input placeholder="Insira o nome de usuário" />
+      </Form.Item>
 
-          <Form.Item
-            name="pwd"
-            label="Senha"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira a senha!",
-              },
-            ]}
-          >
-            <Input.Password placeholder="Insira a senha" />
-          </Form.Item>
+      <Form.Item
+        name="pwd"
+        label="Senha"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, insira a senha!",
+          },
+        ]}
+      >
+        <Input.Password placeholder="Insira a senha" />
+      </Form.Item>
 
-          <Form.Item
-            name="level"
-            label="Nível"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, selecione o nível de acesso!",
-              },
-            ]}
-          >
-            <Select placeholder="Selecione um nível">
-              <Option value="normal">Normal</Option>
-              <Option value="admin">Admin</Option>
-            </Select>
-          </Form.Item>
+      <Form.Item
+        name="level"
+        label="Nível"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, selecione o nível de acesso!",
+          },
+        ]}
+      >
+        <Select placeholder="Selecione um nível">
+          <Option value="normal">Normal</Option>
+          <Option value="admin">Admin</Option>
+        </Select>
+      </Form.Item>
 
-          <Form.Item name="status" label="Status" valuePropName="checked">
-            <Switch />
-          </Form.Item>
+      <Form.Item name="status" label="Status" valuePropName="checked">
+        <Switch />
+      </Form.Item>
 
-          <Form.Item>
-            <Space>
-              <Button type="primary" htmlType="submit">
-                Salvar
-              </Button>
-              <Button href="/users">Cancelar</Button>
-            </Space>
-          </Form.Item>
-        </Form>
-      )}
-    </Fragment>
+      <Form.Item>
+        <Space>
+          <Button type="primary" htmlType="submit">
+            Salvar
+          </Button>
+          <Button href="/users">Cancelar</Button>
+        </Space>
+      </Form.Item>
+    </Form>
   );
 }

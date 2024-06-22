@@ -2,7 +2,7 @@
 
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { useExpiredInfo } from "../hooks/useExpiredInfo";
-import { Card, Col, Row, Spin, Statistic } from "antd";
+import { Card, Col, Row, Statistic } from "antd";
 import { AuthContext } from "../contexts/AuthContext";
 import Datatable from "../components/Datatable";
 import { Fragment, useContext } from "react";
@@ -58,48 +58,42 @@ export default function Home() {
 
   return (
     <Fragment>
-      {isLoading ? (
-        <Spin />
-      ) : (
-        <Fragment>
-          <h1>Bem vindo ao Financy</h1>
-          <Datatable
-            hideNewButton
-            title="Lançamentos do dia"
-            label="lançamento"
-            route="entries"
-            columns={columns}
-            data={expiredInfo?.expiredEntries ?? []}
-            customFetch={fetchItems}
-          />
-          <Row gutter={16} style={{ marginTop: 2 }}>
-            <Col span={12}>
-              <Card style={{ border: "1px solid green" }}>
-                <Statistic
-                  title={<div style={{ color: "green" }}>Receitas</div>}
-                  value={expiredInfo?.revenue ?? 0}
-                  precision={2}
-                  valueStyle={{ color: "#3f8600" }}
-                  prefix={<ArrowUpOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card style={{ border: "1px solid #CF1322" }}>
-                <Statistic
-                  title={<div style={{ color: "#CF1322" }}>Despesas</div>}
-                  value={expiredInfo?.expense ?? 0}
-                  precision={2}
-                  valueStyle={{ color: "#cf1322" }}
-                  prefix={<ArrowDownOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-          </Row>
-        </Fragment>
-      )}
+      <h1>Bem vindo ao Financy</h1>
+      <Datatable
+        hideNewButton
+        title="Lançamentos do dia"
+        label="lançamento"
+        route="entries"
+        columns={columns}
+        data={expiredInfo?.expiredEntries ?? []}
+        customFetch={fetchItems}
+      />
+      <Row gutter={16} style={{ marginTop: 2 }}>
+        <Col span={12}>
+          <Card style={{ border: "1px solid green" }}>
+            <Statistic
+              title={<div style={{ color: "green" }}>Receitas</div>}
+              value={expiredInfo?.revenue ?? 0}
+              precision={2}
+              valueStyle={{ color: "#3f8600" }}
+              prefix={<ArrowUpOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card style={{ border: "1px solid #CF1322" }}>
+            <Statistic
+              title={<div style={{ color: "#CF1322" }}>Despesas</div>}
+              value={expiredInfo?.expense ?? 0}
+              precision={2}
+              valueStyle={{ color: "#cf1322" }}
+              prefix={<ArrowDownOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+      </Row>
     </Fragment>
   );
 }
