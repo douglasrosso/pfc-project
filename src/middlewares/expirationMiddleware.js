@@ -11,41 +11,22 @@ function sortByDueDate(a, b) {
   return getTimestamp(a.due_date) - getTimestamp(b.due_date);
 }
 
-function isDate(date1) {
-  return {
-    greaterThan: (date2) => {
-      return date1 > date2;
-    },
-    smallerThan: (date2) => {
-      return date1 < date2;
-    },
-  };
-}
-
-export async function getExpirationDateMiddleware() {
-  await connectDB();
-  const entries = await Entry.find();
+function filterByExpiredEntries() {
   const today = getTimestamp(new Date().toISOString());
 
-  const expiredEntries = entries
-    .filter(
-      (e) =>
-        getTimestamp(e.due_date) <= today &&
-        (!getTimestamp(e.payment_date) || getTimestamp(e.payment_date) > today)
-    )
-    .sort(sortByDueDate);
+  return (e) =>
+    getTimestamp(e.due_date) <= today &&
+    (!getTimestamp(e.payment_date) || getTimestamp(e.payment_date) > today);
+}
 
-  const totalRevenue = expiredEntries.filter(
-    (item) => item.type === "Receita"
-  ).length;
-  const totalExpense = expiredEntries.filter(
-    (item) => item.type === "Despesa"
-  ).length;
+function filterByType(type) {
+  return (item) => item.type === type;
+}
 
-  const revenuePercentage = (totalRevenue / expiredEntries.length) * 100;
-  const expensePercentage = (totalExpense / expiredEntries.length) * 100;
+function getUserEntriesInfo(entries) {
+  const today = getTimestamp(new Date().toISOString());
 
-  const { pastDueReleases, releasesOfTheDay } = expiredEntries.reduce(
+  return entries.reduce(
     (acc, e) => {
       const dueDate = getTimestamp(e.due_date);
       const paymentDate = getTimestamp(e.payment_date);
@@ -60,6 +41,22 @@ export async function getExpirationDateMiddleware() {
     },
     { pastDueReleases: [], releasesOfTheDay: [] }
   );
+}
+export async function getExpirationDateMiddleware() {
+  await connectDB();
+  const entries = await Entry.find();
+  
+  const expiredEntries = entries
+    .filter(filterByExpiredEntries())
+    .sort(sortByDueDate);
+
+  const totalRevenue = expiredEntries.filter(filterByType("Receita")).length;
+  const totalExpense = expiredEntries.filter(filterByType("Despesa")).length;
+
+  const revenuePercentage = (totalRevenue / expiredEntries.length) * 100;
+  const expensePercentage = (totalExpense / expiredEntries.length) * 100;
+
+  const { pastDueReleases, releasesOfTheDay } = getUserEntriesInfo(expiredEntries);
 
   const releasesOfTheOrderedDay = releasesOfTheDay.sort(sortByDueDate);
   const pastDueReleasesSorted = pastDueReleases.sort(sortByDueDate);
