@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, Badge, Button, Layout, Popover, message } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useExpiredInfo } from "../hooks/useExpiredInfo";
 import { ExitToAppOutlined } from "@mui/icons-material";
 import { AuthContext } from "../contexts/AuthContext";
@@ -12,8 +12,17 @@ import { Menu } from "antd";
 
 const { Header } = Layout;
 
+const navigationKeys = {
+  0: "/home",
+  1: "/entries",
+  2: "/accounts",
+  3: "/categories",
+  4: "/users",
+};
+
 export default function Appbar() {
   const router = useRouter();
+  const path = usePathname();
   const params = useSearchParams();
   const [fetchItems] = useExpiredInfo();
   const { setIsAuthenticated, isAuthenticated, expiredInfo } =
@@ -47,27 +56,22 @@ export default function Appbar() {
 
   function handleNavigateClicked(key) {
     return () => {
-      switch (Number(key)) {
-        case 0:
-          router.replace("/home");
-          break;
-        case 1:
-          router.replace("/entries");
-          break;
-        case 2:
-          router.replace("/accounts");
-          break;
-        case 3:
-          router.replace("/categories");
-          break;
-        case 4:
-          router.replace("/users");
-          break;
-        default:
-          router.replace("/home");
-          break;
-      }
+      router.replace(navigationKeys?.[key] ?? "/home");
     };
+  }
+
+  function getCurrentRouteKey() {
+    const currentRoute = Object.entries(navigationKeys).find(([_, value]) =>
+      path.toLowerCase().includes(value.toLowerCase())
+    );
+
+    if (!currentRoute) {
+      return [];
+    }
+
+    const [key] = currentRoute;
+
+    return [key];
   }
 
   const items = [
@@ -130,6 +134,7 @@ export default function Appbar() {
         theme="dark"
         mode="horizontal"
         items={items}
+        selectedKeys={getCurrentRouteKey()}
         style={{
           flex: 1,
           minWidth: 0,
