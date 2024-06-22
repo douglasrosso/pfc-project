@@ -3,7 +3,7 @@ import { useRouter, useSelectedLayoutSegments } from "next/navigation";
 import { AuthContext } from "../contexts/AuthContext";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { navigationKeys } from "@/utils/navigation";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 
 const { Content: ContentAntD } = Layout;
 

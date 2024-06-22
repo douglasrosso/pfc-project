@@ -10,6 +10,7 @@ import Appbar from "./components/Appbar";
 import Content from "./components/Content";
 import { Suspense } from "react";
 import Footer from "./components/Footer";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +28,13 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ConfigProvider locale={ptBR}>
             <AntdRegistry>
-              <Main>
-                <Suspense>
+              <Suspense fallback={Loading}>
+                <Main>
                   <Appbar />
                   <Content>{children}</Content>
                   <Footer />
-                </Suspense>
-              </Main>
+                </Main>
+              </Suspense>
             </AntdRegistry>
           </ConfigProvider>
         </AuthProvider>
