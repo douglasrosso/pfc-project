@@ -11,6 +11,8 @@ export default function Content({ children }) {
     <ContentAnt
       style={{
         padding: "30px 48px 48px",
+        backgroundColor: "#F8F8F8",
+        boxShadow: "inset rgba(149, 157, 165, 0.2) 0px 8px 24px",
       }}
     >
       <div

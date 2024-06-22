@@ -183,9 +183,9 @@ export default function Datatable({
       setLoading(true);
       const response = await api.delete(`/api/${route}/${id}`);
       setLoading(false);
-      if(response.data.success) {
+      if (response.data.success) {
         message.success(`${label} excluído(a) com sucesso!`);
-        fetchItems();        
+        fetchItems();
       }
     } catch (error) {
       message.error(`Erro ao excluir o(a) ${label}.`);
@@ -231,6 +231,7 @@ export default function Datatable({
         title: "Ações",
         key: "action",
         width: "5rem",
+        fixed: "right",
         render: (_, record) => (
           <Space size="middle">
             <Tooltip placement="left" title={`Editar ${label}`}>
@@ -280,6 +281,7 @@ export default function Datatable({
             ...item,
             key: item._id,
           }))}
+          scroll={{ x: "max-content" }}
           title={() => (
             <Space
               style={{

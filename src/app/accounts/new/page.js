@@ -29,14 +29,6 @@ export default function CreateAccount() {
 
   return (
     <Fragment>
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
-      >
-        Nova conta
-      </Typography.Title>
       {loading ? (
         <Spin
           size="large"
@@ -44,6 +36,15 @@ export default function CreateAccount() {
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
+          <Typography.Title
+            level={2}
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            Nova conta
+          </Typography.Title>
+          
           <Form.Item
             name="description"
             label="Tipo da conta"

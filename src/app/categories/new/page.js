@@ -1,7 +1,16 @@
 "use client";
 
 import React, { Fragment, useState } from "react";
-import { Button, Form, Input, Select, Space, Spin, Typography, message } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  Space,
+  Spin,
+  Typography,
+  message,
+} from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 
@@ -31,15 +40,6 @@ export default function CreateCategory() {
 
   return (
     <Fragment>
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
-      >
-        Nova categoria
-      </Typography.Title>
-
       {loading ? (
         <Spin
           size="large"
@@ -47,6 +47,15 @@ export default function CreateCategory() {
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
+          <Typography.Title
+            level={2}
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            Nova categoria
+          </Typography.Title>
+          
           <Form.Item
             name="description"
             label="Nome da Categoria"
@@ -74,7 +83,7 @@ export default function CreateCategory() {
           </Form.Item>
 
           <Form.Item>
-          <Space>
+            <Space>
               <Button type="primary" htmlType="submit">
                 Salvar
               </Button>

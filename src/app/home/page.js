@@ -5,7 +5,7 @@ import { useExpiredInfo } from "../hooks/useExpiredInfo";
 import { Card, Col, Row, Spin, Statistic } from "antd";
 import { AuthContext } from "../contexts/AuthContext";
 import Datatable from "../components/Datatable";
-import { Fragment, useContext} from "react";
+import { Fragment, useContext } from "react";
 
 const columns = [
   {
@@ -56,38 +56,11 @@ export default function Home() {
 
   return (
     <Fragment>
-      <h1>Home</h1>
+      <h1>Bem vindo ao Financy</h1>
       {isLoading ? (
         <Spin />
       ) : (
-        <>
-          <Row gutter={16} style={{ marginBottom: 2 }}>
-            <Col span={12}>
-              <Card bordered={false}>
-                <Statistic
-                  title="Receitas"
-                  value={expiredInfo?.revenue ?? 0}
-                  precision={2}
-                  valueStyle={{ color: "#3f8600" }}
-                  prefix={<ArrowUpOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card bordered={false}>
-                <Statistic
-                  title="Despesas"
-                  value={expiredInfo?.expense ?? 0}
-                  precision={2}
-                  valueStyle={{ color: "#cf1322" }}
-                  prefix={<ArrowDownOutlined />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-          </Row>
-
+        <Fragment>
           <Datatable
             hideNewButton
             title="Lançamentos do dia"
@@ -97,7 +70,33 @@ export default function Home() {
             data={expiredInfo?.expiredEntries ?? []}
             customFetch={fetchItems}
           />
-        </>
+          <Row gutter={16} style={{ marginTop: 2 }}>
+            <Col span={12}>
+              <Card style={{ border: "1px solid green" }}>
+                <Statistic
+                  title={<div style={{ color: "green" }}>Receitas</div>}
+                  value={expiredInfo?.revenue ?? 0}
+                  precision={2}
+                  valueStyle={{ color: "#3f8600" }}
+                  prefix={<ArrowUpOutlined />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card style={{ border: "1px solid #CF1322" }}>
+                <Statistic
+                  title={<div style={{ color: "#CF1322" }}>Despesas</div>}
+                  value={expiredInfo?.expense ?? 0}
+                  precision={2}
+                  valueStyle={{ color: "#cf1322" }}
+                  prefix={<ArrowDownOutlined />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+          </Row>
+        </Fragment>
       )}
     </Fragment>
   );

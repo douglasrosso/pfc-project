@@ -3,19 +3,14 @@ import Entry from "@/models/Entry";
 
 function getTimestamp(date) {
   if (date) {
-    const formatedDate = new Date(date.substring(0, 10)).getTime();
-    return formatedDate;
+    const formattedDate = new Date(date.substring(0, 10)).getTime();
+    return formattedDate;
   }
+  return null;
 }
 
 function sortByDueDate(a, b) {
-  if (a.due_date > b.due_date) {
-    return 1;
-  }
-  if (a.due_date < b.due_date) {
-    return -1;
-  }
-  return 0;
+  return getTimestamp(a.due_date) - getTimestamp(b.due_date);
 }
 
 export async function getExpirationDateMiddleware() {
@@ -41,10 +36,31 @@ export async function getExpirationDateMiddleware() {
   const revenuePercentage = (totalRevenue / expiredEntries.length) * 100;
   const expensePercentage = (totalExpense / expiredEntries.length) * 100;
 
+  const { pastDueReleases, releasesOfTheDay } = entries.reduce(
+    (acc, e) => {
+      const dueDate = getTimestamp(e.due_date);
+      const paymentDate = getTimestamp(e.payment_date);
+
+      if (dueDate === today && paymentDate === today) {
+        acc.releasesOfTheDay.push(e);
+      } else if (dueDate < today && paymentDate <= today) {
+        acc.pastDueReleases.push(e);
+      }
+
+      return acc;
+    },
+    { pastDueReleases: [], releasesOfTheDay: [] }
+  );
+
+  const releasesOfTheOrderedDay = releasesOfTheDay.sort(sortByDueDate);
+  const pastDueReleasesSorted = pastDueReleases.sort(sortByDueDate);
+
   return {
     expiredEntries,
     expiredEntriesCount: expiredEntries.length,
     revenue: revenuePercentage,
     expense: expensePercentage,
+    releasesOfTheOrderedDay,
+    pastDueReleasesSorted,
   };
 }

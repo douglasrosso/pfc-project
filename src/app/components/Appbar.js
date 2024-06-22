@@ -1,9 +1,13 @@
 "use client";
 
-import { Avatar, Badge, Button, Layout, Popover, message } from "antd";
+import { Avatar, Badge, Button, Layout, Popover, Space, message } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useExpiredInfo } from "../hooks/useExpiredInfo";
-import { ExitToAppOutlined } from "@mui/icons-material";
+import {
+  DangerousRounded,
+  ExitToAppOutlined,
+  WarningRounded,
+} from "@mui/icons-material";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useEffect, useRef } from "react";
 import { UserOutlined } from "@ant-design/icons";
@@ -109,9 +113,46 @@ export default function Appbar() {
     >
       <Popover
         trigger="click"
+        title={<div style={{ textAlign: "center" }}>Resumo de lançamentos</div>}
         content={
-          <div>
-            <p>teste</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Space style={{ display: "flex", alignItems: "center" }}>
+              <WarningRounded
+                style={{
+                  fill: "#EF6C00",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
+              <p style={{ margin: 0, color: "#EF6C00" }}>
+                Lançamentos do dia:{" "}
+                <strong>
+                  {expiredInfo?.releasesOfTheOrderedDay.length ?? 0}{" "}
+                </strong>
+              </p>
+            </Space>
+            <Space
+              style={{ display: "flex", alignItems: "center", marginTop: 10 }}
+            >
+              <DangerousRounded
+                style={{
+                  fill: "#CF1322",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
+              <p style={{ margin: 0, color: "#CF1322" }}>
+                Lançamentos vencidos:{" "}
+                <strong>
+                  {expiredInfo?.pastDueReleasesSorted.length ?? 0}{" "}
+                </strong>
+              </p>
+            </Space>
           </div>
         }
       >
@@ -119,7 +160,7 @@ export default function Appbar() {
           <Badge count={expiredInfo?.expiredEntriesCount ?? 0}>
             <Avatar
               style={{
-                backgroundColor: "#87d068",
+                backgroundColor: "#1677FF",
               }}
               icon={<UserOutlined />}
             />

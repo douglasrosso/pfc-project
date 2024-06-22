@@ -11,6 +11,7 @@ import {
   message,
   InputNumber,
   Space,
+  Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
 import moment from "moment";
@@ -111,6 +112,15 @@ export default function EditEntry({ params }) {
       onFinish={onFinish}
       layout="vertical"
     >
+      <Typography.Title
+        level={2}
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        Editar lançamento
+      </Typography.Title>
+
       <Form.Item
         name="type"
         label="Tipo"
@@ -211,7 +221,10 @@ export default function EditEntry({ params }) {
 
       <Form.Item name="payment_date" label="Data de Pagamento">
         <DatePicker
-          disabled={!!form.getFieldValue("payment_date") && form.getFieldValue("status") === "Paga"}
+          disabled={
+            !!form.getFieldValue("payment_date") &&
+            form.getFieldValue("status") === "Paga"
+          }
           placeholder="Selecione a data de pagamento"
           style={{ width: "100%" }}
         />

@@ -12,6 +12,7 @@ import {
   InputNumber,
   Space,
   Flex,
+  Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
@@ -86,6 +87,15 @@ export default function CreateEntry() {
       onFinish={onFinish}
       layout="vertical"
     >
+      <Typography.Title
+        level={2}
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        Novo lançamento
+      </Typography.Title>
+
       <Form.Item
         name="type"
         label="Tipo"

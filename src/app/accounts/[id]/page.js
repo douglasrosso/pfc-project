@@ -48,14 +48,6 @@ export default function EditAccount({ params }) {
 
   return (
     <Fragment>
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
-      >
-        Editar conta
-      </Typography.Title>
       {loading ? (
         <Spin
           size="large"
@@ -63,6 +55,15 @@ export default function EditAccount({ params }) {
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
+          <Typography.Title
+            level={2}
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            Editar conta
+          </Typography.Title>
+          
           <Form.Item
             name="description"
             label="Tipo da conta"
