@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar, Badge, Button, Layout, Popover, Space, message } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Avatar, Badge, Button, Layout, Popover, Space, message } from "antd"; 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useExpiredInfo } from "../hooks/useExpiredInfo";
 import {
   DangerousRounded,
@@ -16,8 +16,17 @@ import { Menu } from "antd";
 
 const { Header } = Layout;
 
+const navigationKeys = [
+  { path: "/home", title: "Home" },
+  { path: "/entries", title: "Lançamentos" },
+  { path: "/accounts", title: "Contas" },
+  { path: "/categories", title: "Categorias" },
+  { path: "/users", title: "Usuários" },
+];
+
 export default function Appbar() {
   const router = useRouter();
+  const path = usePathname();
   const params = useSearchParams();
   const [fetchItems] = useExpiredInfo();
   const { setIsAuthenticated, isAuthenticated, expiredInfo } =
@@ -51,56 +60,27 @@ export default function Appbar() {
 
   function handleNavigateClicked(key) {
     return () => {
-      switch (Number(key)) {
-        case 0:
-          router.replace("/home");
-          break;
-        case 1:
-          router.replace("/entries");
-          break;
-        case 2:
-          router.replace("/accounts");
-          break;
-        case 3:
-          router.replace("/categories");
-          break;
-        case 4:
-          router.replace("/users");
-          break;
-        default:
-          router.replace("/home");
-          break;
-      }
+      router.replace(navigationKeys?.[key].path ?? "/home");
     };
   }
 
-  const items = [
-    {
-      key: 0,
-      label: "Home",
-      onClick: handleNavigateClicked("0"),
-    },
-    {
-      key: 1,
-      label: "Lançamentos",
-      onClick: handleNavigateClicked("1"),
-    },
-    {
-      key: 2,
-      label: "Contas",
-      onClick: handleNavigateClicked("2"),
-    },
-    {
-      key: 3,
-      label: "Categorias",
-      onClick: handleNavigateClicked("3"),
-    },
-    {
-      key: 4,
-      label: "Usuários",
-      onClick: handleNavigateClicked("4"),
-    },
-  ];
+  function getCurrentRouteKey() {
+    const currentRouteIndex = navigationKeys.findIndex((item) =>
+      path.toLowerCase().includes(item.path.toLowerCase())
+    );
+
+    if (currentRouteIndex < 0) {
+      return [];
+    }
+
+    return [String(currentRouteIndex)];
+  }
+
+  const items = navigationKeys.map((item, index) => ({
+    key: index,
+    label: item.title,
+    onClick: handleNavigateClicked(String(index)),
+  }));
 
   return isAuthenticated ? (
     <Header
@@ -171,6 +151,7 @@ export default function Appbar() {
         theme="dark"
         mode="horizontal"
         items={items}
+        selectedKeys={getCurrentRouteKey()}
         style={{
           flex: 1,
           minWidth: 0,
