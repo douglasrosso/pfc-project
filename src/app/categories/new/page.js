@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -20,12 +21,14 @@ export default function CreateCategory() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+  const [fetchItems] = useExpiredInfo();
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
       await api.post("/api/categories", values);
       message.success("Categoria criada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a categoria.");
@@ -43,7 +46,7 @@ export default function CreateCategory() {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
@@ -55,7 +58,7 @@ export default function CreateCategory() {
           >
             Nova categoria
           </Typography.Title>
-          
+
           <Form.Item
             name="description"
             label="Nome da Categoria"

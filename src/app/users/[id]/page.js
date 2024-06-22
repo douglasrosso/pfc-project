@@ -14,6 +14,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -21,6 +22,7 @@ export default function EditUser({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
   const router = useRouter();
+  const [fetchItems] = useExpiredInfo();
   const [loading, setLoading] = useState(!!id);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function EditUser({ params }) {
       values.status = values.status ? "on" : "off";
       await api.put(`/api/users/${form.getFieldValue("_id")}`, values);
       message.success("Usuário atualizado com sucesso!");
-
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar o usuário.");
@@ -76,7 +78,7 @@ export default function EditUser({ params }) {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form
@@ -158,7 +160,7 @@ export default function EditUser({ params }) {
           </Form.Item>
 
           <Form.Item>
-          <Space>
+            <Space>
               <Button type="primary" htmlType="submit">
                 Salvar
               </Button>

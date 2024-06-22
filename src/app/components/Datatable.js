@@ -265,9 +265,7 @@ export default function Datatable({
     }
   }, [customFetch, isFirstTime, fetchItems]);
 
-  return loading ? (
-    <Spin size="large" style={{ justifyContent: "center", display: "flex" }} />
-  ) : (
+  return (
     <Table
       sticky
       onChange={handleTableChange}

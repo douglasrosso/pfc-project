@@ -19,20 +19,20 @@ export default function Content({ children }) {
         display: "flex",
         flexDirection: "column",
         alignItems: !isAuthenticated && "center",
+        justifyContent: !isAuthenticated && "center",
       }}
     >
       <div
         style={{
           background: colorBgContainer,
-          paddingInline: 24,
           marginTop: "30px !important",
-          paddingBottom: 30,
+          padding: "30px 24px",
           minHeight: 200,
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           justifyContent: "center",
           borderRadius: borderRadiusLG,
-          width: !isAuthenticated && 400,
         }}
       >
         {children}

@@ -4,17 +4,20 @@ import React, { Fragment, useState } from "react";
 import { Button, Form, Input, message, Space, Spin, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 export default function CreateAccount() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+  const [fetchItems] = useExpiredInfo();
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
       await api.post("/api/accounts", values);
       message.success("Conta cadastrada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao cadastrar a conta.");
@@ -32,7 +35,7 @@ export default function CreateAccount() {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
@@ -44,7 +47,7 @@ export default function CreateAccount() {
           >
             Nova conta
           </Typography.Title>
-          
+
           <Form.Item
             name="description"
             label="Tipo da conta"

@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -20,6 +21,7 @@ export default function CreateUser() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
+  const [fetchItems] = useExpiredInfo();
 
   const onFinish = async (values) => {
     try {
@@ -30,6 +32,7 @@ export default function CreateUser() {
         status: "on",
       });
       message.success("Usuário cadastrado com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao cadastrar o usuário.");
@@ -55,7 +58,7 @@ export default function CreateUser() {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">

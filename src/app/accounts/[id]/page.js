@@ -4,12 +4,15 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Button, Form, Input, Space, Spin, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 export default function EditAccount({ params }) {
   const { id } = params;
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(!!id);
+  const [fetchItems] = useExpiredInfo();
+
   useEffect(() => {
     fetchUser();
   }, [id]);
@@ -34,6 +37,7 @@ export default function EditAccount({ params }) {
       setLoading(true);
       await api.put(`/api/accounts/${form.getFieldValue("_id")}`, values);
       message.success("Conta atualizada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a conta.");
@@ -51,7 +55,7 @@ export default function EditAccount({ params }) {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form form={form} onFinish={onFinish} layout="vertical">
@@ -63,7 +67,7 @@ export default function EditAccount({ params }) {
           >
             Editar conta
           </Typography.Title>
-          
+
           <Form.Item
             name="description"
             label="Tipo da conta"

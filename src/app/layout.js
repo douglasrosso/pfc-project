@@ -4,7 +4,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "./contexts/AuthContext";
 import { Inter } from "next/font/google";
 import ptBR from "antd/lib/locale/pt_BR";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Spin } from "antd";
 import "@/styles/globals.css";
 import Appbar from "./components/Appbar";
 import Content from "./components/Content";

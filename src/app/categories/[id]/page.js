@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -21,6 +22,7 @@ export default function EditCategory({ params }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState(!!id);
+  const [fetchItems] = useExpiredInfo();
 
   useEffect(() => {
     fetchCategories();
@@ -45,6 +47,7 @@ export default function EditCategory({ params }) {
     try {
       await api.put(`/api/categories/${form.getFieldValue("_id")}`, values);
       message.success("Categoria atualizada com sucesso!");
+      fetchItems();
       handleSuccess();
     } catch (error) {
       message.error("Erro ao salvar a categoria.");
@@ -60,7 +63,7 @@ export default function EditCategory({ params }) {
       {loading ? (
         <Spin
           size="large"
-          style={{ justifyContent: "center", display: "flex" }}
+          style={{ justifyContent: "center", display: "flex", margin: 30 }}
         />
       ) : (
         <Form
@@ -77,7 +80,7 @@ export default function EditCategory({ params }) {
           >
             Editar categoria
           </Typography.Title>
-          
+
           <Form.Item
             name="description"
             label="Nome da Categoria"

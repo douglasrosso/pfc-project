@@ -5,9 +5,7 @@ import {
   Input,
   Button,
   notification,
-  Checkbox,
-  Flex,
-  QRCode,
+  Checkbox
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
