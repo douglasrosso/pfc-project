@@ -2,7 +2,10 @@ import connectDB from "@/db/connect";
 import Entry from "@/models/Entry";
 
 function getTimestamp(date) {
-  return new Date(date.substring(0, 10)).getTime();
+  if (date) {
+    const formatedDate = new Date(date.substring(0, 10)).getTime();
+    return formatedDate;
+  }
 }
 
 function sortByDueDate(a, b) {
