@@ -21,16 +21,16 @@ export default function Appbar() {
   const isFirstTime = useRef(true);
 
   useEffect(() => {
-    const messageParam = params?.get?.('message');
+    const messageParam = params?.get?.("message");
     if (messageParam) {
       message.error(messageParam);
-      router.replace('/home')
+      router.replace("/home");
       router.refresh();
     }
   }, [params, router]);
 
   useEffect(() => {
-    if (isFirstTime.current && !expiredInfo) {
+    if (isFirstTime.current && !expiredInfo && isAuthenticated) {
       isFirstTime.current = false;
       fetchItems();
     }

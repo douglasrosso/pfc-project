@@ -21,7 +21,11 @@ export async function getExpirationDateMiddleware() {
   const today = new Date().getTime();
 
   const expiredEntries = entries
-    .filter((e) => getTimestamp(e.due_date) <= today)
+    .filter(
+      (e) =>
+        getTimestamp(e.due_date) <= today &&
+        getTimestamp(e.payment_date) <= today
+    )
     .sort(sortByDueDate);
 
   const totalRevenue = expiredEntries.filter(
