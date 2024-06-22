@@ -58,11 +58,11 @@ export default function Home() {
 
   return (
     <Fragment>
-      <h1>Bem vindo ao Financy</h1>
       {isLoading ? (
         <Spin />
       ) : (
         <Fragment>
+          <h1>Bem vindo ao Financy</h1>
           <Datatable
             hideNewButton
             title="Lançamentos do dia"

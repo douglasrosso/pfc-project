@@ -265,53 +265,46 @@ export default function Datatable({
     }
   }, [customFetch, isFirstTime, fetchItems]);
 
-  return (
-    <Fragment>
-      {loading ? (
-        <Spin
-          size="large"
-          style={{ justifyContent: "center", display: "flex" }}
-        />
-      ) : (
-        <Table
-          sticky
-          onChange={handleTableChange}
-          loading={loading}
-          columns={columnsMapped}
-          dataSource={(data ?? items).map((item) => ({
-            ...item,
-            key: item._id,
-          }))}
-          scroll={{ x: "max-content" }}
-          title={() => (
-            <Space
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+  return loading ? (
+    <Spin size="large" style={{ justifyContent: "center", display: "flex" }} />
+  ) : (
+    <Table
+      sticky
+      onChange={handleTableChange}
+      loading={loading}
+      columns={columnsMapped}
+      dataSource={(data ?? items).map((item) => ({
+        ...item,
+        key: item._id,
+      }))}
+      scroll={{ x: "max-content" }}
+      title={() => (
+        <Space
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography.Title
+            level={2}
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            {title}
+          </Typography.Title>
+          {!hideNewButton && (
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={handleNewClicked}
             >
-              <Typography.Title
-                level={2}
-                style={{
-                  marginBottom: 20,
-                }}
-              >
-                {title}
-              </Typography.Title>
-              {!hideNewButton && (
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={handleNewClicked}
-                >
-                  Novo
-                </Button>
-              )}
-            </Space>
+              Novo
+            </Button>
           )}
-        />
+        </Space>
       )}
-    </Fragment>
+    />
   );
 }
