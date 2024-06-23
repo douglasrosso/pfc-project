@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -11,9 +11,10 @@ import {
   Typography,
   message,
 } from "antd";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
+import Loader from "@/app/components/Loader";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
-import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -23,10 +24,6 @@ export default function EditUser({ params }) {
   const router = useRouter();
   const [fetchItems] = useExpiredInfo();
   const [loading, setLoading] = useState(!!id);
-
-  useEffect(() => {
-    fetchUser();
-  }, [id]);
 
   async function fetchUser() {
     try {
@@ -64,101 +61,107 @@ export default function EditUser({ params }) {
     router.push("/users");
   };
 
+  useEffect(() => {
+    if (id) fetchUser();
+  }, [id]);
+
   return (
-    <Form
-      form={form}
-      initialValues={form}
-      onFinish={onFinish}
-      layout="vertical"
-    >
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
+    <Loader isLoading={loading}>
+      <Form
+        form={form}
+        initialValues={form}
+        onFinish={onFinish}
+        layout="vertical"
       >
-        Edição Cadastral
-      </Typography.Title>
-      <Form.Item
-        name="name"
-        label="Nome"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o nome do usuário!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira o nome do usuário" />
-      </Form.Item>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          Edição Cadastral
+        </Typography.Title>
+        <Form.Item
+          name="name"
+          label="Nome"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o nome do usuário!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira o nome do usuário" />
+        </Form.Item>
 
-      <Form.Item
-        name="email"
-        label="E-mail"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o e-mail do usuário!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira o e-mail do usuário" />
-      </Form.Item>
+        <Form.Item
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o e-mail do usuário!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira o e-mail do usuário" />
+        </Form.Item>
 
-      <Form.Item
-        name="user"
-        label="Usuário"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o nome de usuário!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira o nome de usuário" />
-      </Form.Item>
+        <Form.Item
+          name="user"
+          label="Usuário"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o nome de usuário!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira o nome de usuário" />
+        </Form.Item>
 
-      <Form.Item
-        name="pwd"
-        label="Senha"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira a senha!",
-          },
-        ]}
-      >
-        <Input.Password placeholder="Insira a senha" />
-      </Form.Item>
+        <Form.Item
+          name="pwd"
+          label="Senha"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira a senha!",
+            },
+          ]}
+        >
+          <Input.Password placeholder="Insira a senha" />
+        </Form.Item>
 
-      <Form.Item
-        name="level"
-        label="Nível"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione o nível de acesso!",
-          },
-        ]}
-      >
-        <Select placeholder="Selecione um nível">
-          <Option value="normal">Normal</Option>
-          <Option value="admin">Admin</Option>
-        </Select>
-      </Form.Item>
+        <Form.Item
+          name="level"
+          label="Nível"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione o nível de acesso!",
+            },
+          ]}
+        >
+          <Select placeholder="Selecione um nível">
+            <Option value="normal">Normal</Option>
+            <Option value="admin">Admin</Option>
+          </Select>
+        </Form.Item>
 
-      <Form.Item name="status" label="Status" valuePropName="checked">
-        <Switch />
-      </Form.Item>
+        <Form.Item name="status" label="Status" valuePropName="checked">
+          <Switch />
+        </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit">
-            Salvar
-          </Button>
-          <Button href="/users">Cancelar</Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Salvar
+            </Button>
+            <Button href="/users">Cancelar</Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </Loader>
   );
 }

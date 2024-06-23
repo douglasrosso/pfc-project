@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Space, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
+import Loader from "@/app/components/Loader";
 
 export default function EditAccount({ params }) {
   const { id } = params;
@@ -12,10 +13,6 @@ export default function EditAccount({ params }) {
   const router = useRouter();
   const [loading, setLoading] = useState(!!id);
   const [fetchItems] = useExpiredInfo();
-
-  useEffect(() => {
-    fetchUser();
-  }, [id]);
 
   async function fetchUser() {
     try {
@@ -50,51 +47,57 @@ export default function EditAccount({ params }) {
     router.push("/accounts");
   };
 
+  useEffect(() => {
+    if (id) fetchUser();
+  }, [id]);
+
   return (
-    <Form form={form} onFinish={onFinish} layout="vertical">
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
-      >
-        Editar conta
-      </Typography.Title>
+    <Loader isLoading={loading}>
+      <Form form={form} onFinish={onFinish} layout="vertical">
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          Editar conta
+        </Typography.Title>
 
-      <Form.Item
-        name="description"
-        label="Tipo da conta"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o tipo da conta!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira o tipo da conta" />
-      </Form.Item>
+        <Form.Item
+          name="description"
+          label="Tipo da conta"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o tipo da conta!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira o tipo da conta" />
+        </Form.Item>
 
-      <Form.Item
-        name="comments"
-        label="Informações da conta"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira as informações da conta!",
-          },
-        ]}
-      >
-        <Input.TextArea placeholder="Insira as informações da conta" />
-      </Form.Item>
+        <Form.Item
+          name="comments"
+          label="Informações da conta"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira as informações da conta!",
+            },
+          ]}
+        >
+          <Input.TextArea placeholder="Insira as informações da conta" />
+        </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit">
-            Salvar
-          </Button>
-          <Button href="/accounts">Cancelar</Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Salvar
+            </Button>
+            <Button href="/accounts">Cancelar</Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </Loader>
   );
 }

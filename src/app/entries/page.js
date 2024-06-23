@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
 import Datatable from "../components/Datatable";
+import React, { Suspense } from "react";
+import Loading from "../loading";
 
 const columns = [
   {
@@ -50,11 +51,13 @@ const columns = [
 
 export default function Entries() {
   return (
-    <Datatable
-      columns={columns}
-      title="Lançamentos"
-      label="lançamento"
-      route="entries"
-    />
+    <Suspense fallback={<Loading />}>
+      <Datatable
+        columns={columns}
+        title="Lançamentos"
+        label="lançamento"
+        route="entries"
+      />
+    </Suspense>
   );
 }

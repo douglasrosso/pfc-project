@@ -1,6 +1,8 @@
+"use client";
+
 import { Spin } from "antd";
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
-  return <Spin size={48} />;
+  return <Spin size={72} />;
 }

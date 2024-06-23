@@ -2,15 +2,15 @@
 
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "./contexts/AuthContext";
+import Content from "./components/Content";
 import { Inter } from "next/font/google";
 import ptBR from "antd/lib/locale/pt_BR";
-import { ConfigProvider, Layout } from "antd";
-import "@/styles/globals.css";
 import Appbar from "./components/Appbar";
-import Content from "./components/Content";
-import { Suspense } from "react";
 import Footer from "./components/Footer";
+import { ConfigProvider } from "antd";
+import { Suspense } from "react";
 import Loading from "./loading";
+import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,13 +28,13 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ConfigProvider locale={ptBR}>
             <AntdRegistry>
-              <Suspense fallback={Loading}>
-                <Main>
+              <Main>
+                <Suspense fallback={<Loading />}>
                   <Appbar />
                   <Content>{children}</Content>
                   <Footer />
-                </Main>
-              </Suspense>
+                </Suspense>
+              </Main>
             </AntdRegistry>
           </ConfigProvider>
         </AuthProvider>

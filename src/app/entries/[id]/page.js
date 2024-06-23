@@ -13,10 +13,11 @@ import {
   Space,
   Typography,
 } from "antd";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
+import Loader from "@/app/components/Loader";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import { api } from "@/utils/api";
-import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -29,14 +30,6 @@ export default function EditEntry({ params }) {
   const [accounts, setAccounts] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [fetchItems] = useExpiredInfo();
-
-  useEffect(() => {
-    if (id) {
-      fetchCategories();
-      fetchAccounts();
-      fetchEntry();
-    }
-  }, [id]);
 
   async function fetchEntry() {
     try {
@@ -107,195 +100,205 @@ export default function EditEntry({ params }) {
     router.push("/entries");
   };
 
+  useEffect(() => {
+    if (id) {
+      fetchCategories();
+      fetchAccounts();
+      fetchEntry();
+    }
+  }, [id]);
+
   return (
-    <Form
-      form={form}
-      initialValues={form}
-      onValuesChange={onValuesChange}
-      onFinish={onFinish}
-      layout="vertical"
-    >
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
+    <Loader isLoading={loading}>
+      <Form
+        form={form}
+        initialValues={form}
+        onValuesChange={onValuesChange}
+        onFinish={onFinish}
+        layout="vertical"
       >
-        Editar lançamento
-      </Typography.Title>
-
-      <Form.Item
-        name="type"
-        label="Tipo"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione o tipo!",
-          },
-        ]}
-      >
-        <Select placeholder="Selecione o tipo">
-          <Option value="Despesa">Despesa</Option>
-          <Option value="Receita">Receita</Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="categories"
-        label="Categoria"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione a categoria!",
-          },
-        ]}
-      >
-        <Select placeholder="Selecione a categoria">
-          {filteredCategories.map((category) => (
-            <Option key={category._id} value={category.description}>
-              {category.description}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="description"
-        label="Descrição"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira a descrição!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira a descrição" />
-      </Form.Item>
-
-      <Form.Item
-        name="value"
-        label="Valor"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o valor!",
-          },
-        ]}
-      >
-        <InputNumber
-          formatter={(value) => {
-            value = value.replace(/\D/g, "");
-            value = Number(value) / 100;
-
-            if (isNaN(value) || value === "") {
-              value = 0;
-            }
-
-            const formatter = new Intl.NumberFormat("pt-BR", {
-              minimumFractionDigits: 2,
-            });
-
-            form.setFieldValue("value", formatter.format(value));
-            return formatter.format(value);
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
           }}
-          parser={(value) => {
-            return value.replace(/\D/g, "");
-          }}
-          placeholder="Insira o valor"
-          style={{ width: "100%" }}
-        />
-      </Form.Item>
+        >
+          Editar lançamento
+        </Typography.Title>
 
-      <Form.Item
-        name="due_date"
-        label="Data de Vencimento"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione a data de vencimento!",
-          },
-        ]}
-      >
-        <DatePicker
-          placeholder="Selecione a data de vencimento"
-          style={{ width: "100%" }}
-        />
-      </Form.Item>
-
-      <Form.Item name="payment_date" label="Data de Pagamento">
-        <DatePicker
-          disabled={
-            !!form.getFieldValue("payment_date") &&
-            form.getFieldValue("status") === "Paga"
-          }
-          placeholder="Selecione a data de pagamento"
-          style={{ width: "100%" }}
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="account"
-        label="Conta"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione a conta!",
-          },
-        ]}
-      >
-        <Select placeholder="Selecione a conta">
-          {accounts.map((account) => (
-            <Option
-              key={account._id}
-              value={`${account.description} - ${account.comments}`}
-            >
-              {`${account.description} - ${account.comments}`}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="status"
-        label="Status"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, selecione o status!",
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (value === "Paga" && !getFieldValue("payment_date")) {
-                return Promise.reject(
-                  'Por favor, informe a data de pagamento para marcar como "Paga".'
-                );
-              }
-              return Promise.resolve();
+        <Form.Item
+          name="type"
+          label="Tipo"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione o tipo!",
             },
-            dependencies: ["payment_date"],
-          }),
-        ]}
-      >
-        <Select placeholder="Selecione o status">
-          <Option value="Lancada">Lançada</Option>
-          <Option value="Confirmada">Confirmada</Option>
-          <Option value="Paga">Paga</Option>
-          <Option value="Cancelada">Cancelada</Option>
-        </Select>
-      </Form.Item>
+          ]}
+        >
+          <Select placeholder="Selecione o tipo">
+            <Option value="Despesa">Despesa</Option>
+            <Option value="Receita">Receita</Option>
+          </Select>
+        </Form.Item>
 
-      <Form.Item name="comments" label="Ativo" valuePropName="checked">
-        <Switch />
-      </Form.Item>
+        <Form.Item
+          name="categories"
+          label="Categoria"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione a categoria!",
+            },
+          ]}
+        >
+          <Select placeholder="Selecione a categoria">
+            {filteredCategories.map((category) => (
+              <Option key={category._id} value={category.description}>
+                {category.description}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Salvar
-          </Button>
-          <Button href="/entries">Cancelar</Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name="description"
+          label="Descrição"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira a descrição!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira a descrição" />
+        </Form.Item>
+
+        <Form.Item
+          name="value"
+          label="Valor"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o valor!",
+            },
+          ]}
+        >
+          <InputNumber
+            formatter={(value) => {
+              value = value.replace(/\D/g, "");
+              value = Number(value) / 100;
+
+              if (isNaN(value) || value === "") {
+                value = 0;
+              }
+
+              const formatter = new Intl.NumberFormat("pt-BR", {
+                minimumFractionDigits: 2,
+              });
+
+              form.setFieldValue("value", formatter.format(value));
+              return formatter.format(value);
+            }}
+            parser={(value) => {
+              return value.replace(/\D/g, "");
+            }}
+            placeholder="Insira o valor"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="due_date"
+          label="Data de Vencimento"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione a data de vencimento!",
+            },
+          ]}
+        >
+          <DatePicker
+            placeholder="Selecione a data de vencimento"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item name="payment_date" label="Data de Pagamento">
+          <DatePicker
+            disabled={
+              !!form.getFieldValue("payment_date") &&
+              form.getFieldValue("status") === "Paga"
+            }
+            placeholder="Selecione a data de pagamento"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="account"
+          label="Conta"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione a conta!",
+            },
+          ]}
+        >
+          <Select placeholder="Selecione a conta">
+            {accounts.map((account) => (
+              <Option
+                key={account._id}
+                value={`${account.description} - ${account.comments}`}
+              >
+                {`${account.description} - ${account.comments}`}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="status"
+          label="Status"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, selecione o status!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (value === "Paga" && !getFieldValue("payment_date")) {
+                  return Promise.reject(
+                    'Por favor, informe a data de pagamento para marcar como "Paga".'
+                  );
+                }
+                return Promise.resolve();
+              },
+              dependencies: ["payment_date"],
+            }),
+          ]}
+        >
+          <Select placeholder="Selecione o status">
+            <Option value="Lancada">Lançada</Option>
+            <Option value="Confirmada">Confirmada</Option>
+            <Option value="Paga">Paga</Option>
+            <Option value="Cancelada">Cancelada</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item name="comments" label="Ativo" valuePropName="checked">
+          <Switch />
+        </Form.Item>
+
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Salvar
+            </Button>
+            <Button href="/entries">Cancelar</Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </Loader>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
 import { Button, Form, Input, Select, Space, Typography, message } from "antd";
+import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
+import React, { useState, useEffect } from "react";
+import Loader from "@/app/components/Loader";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
-import { useExpiredInfo } from "@/app/hooks/useExpiredInfo";
 
 const { Option } = Select;
 
@@ -14,10 +15,6 @@ export default function EditCategory({ params }) {
   const router = useRouter();
   const [loading, setLoading] = useState(!!id);
   const [fetchItems] = useExpiredInfo();
-
-  useEffect(() => {
-    fetchCategories();
-  }, [id]);
 
   async function fetchCategories() {
     try {
@@ -49,54 +46,60 @@ export default function EditCategory({ params }) {
     router.push("/categories");
   };
 
+  useEffect(() => {
+    if (id) fetchCategories();
+  }, [id]);
+
   return (
-    <Form
-      form={form}
-      initialValues={form}
-      onFinish={onFinish}
-      layout="vertical"
-    >
-      <Typography.Title
-        level={2}
-        style={{
-          marginBottom: 20,
-        }}
+    <Loader isLoading={loading}>
+      <Form
+        form={form}
+        initialValues={form}
+        onFinish={onFinish}
+        layout="vertical"
       >
-        Editar categoria
-      </Typography.Title>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          Editar categoria
+        </Typography.Title>
 
-      <Form.Item
-        name="description"
-        label="Nome da Categoria"
-        rules={[
-          {
-            required: true,
-            message: "Por favor, insira o nome da categoria!",
-          },
-        ]}
-      >
-        <Input placeholder="Insira o nome da categoria" />
-      </Form.Item>
+        <Form.Item
+          name="description"
+          label="Nome da Categoria"
+          rules={[
+            {
+              required: true,
+              message: "Por favor, insira o nome da categoria!",
+            },
+          ]}
+        >
+          <Input placeholder="Insira o nome da categoria" />
+        </Form.Item>
 
-      <Form.Item
-        name="type"
-        label="Tipo"
-        rules={[{ required: true, message: "Por favor, selecione o tipo!" }]}
-      >
-        <Select placeholder="Selecione um tipo">
-          <Option value="Receita">Receita</Option>
-          <Option value="Despesa">Despesa</Option>
-        </Select>
-      </Form.Item>
+        <Form.Item
+          name="type"
+          label="Tipo"
+          rules={[{ required: true, message: "Por favor, selecione o tipo!" }]}
+        >
+          <Select placeholder="Selecione um tipo">
+            <Option value="Receita">Receita</Option>
+            <Option value="Despesa">Despesa</Option>
+          </Select>
+        </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit">
-            Salvar
-          </Button>
-          <Button href="/categories">Cancelar</Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Salvar
+            </Button>
+            <Button href="/categories">Cancelar</Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </Loader>
   );
 }
