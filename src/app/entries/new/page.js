@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
   Input,
   Select,
   Switch,
-  DatePicker,
   message,
   InputNumber,
   Space,
-  Flex,
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
@@ -65,6 +63,8 @@ export default function CreateEntry() {
   const onFinish = async (values) => {
     try {
       setLoading(true);
+      if (values.due_date) values.due_date = values.due_date;
+      if (values.payment_date) values.payment_date = values.payment_date;
       await api.post("/api/entries", {
         ...values,
         comments: "on",
@@ -191,24 +191,18 @@ export default function CreateEntry() {
           },
         ]}
       >
-        <DatePicker
-          placeholder="Selecione a data de pagamento"
+        <Input
+          type="date"
+          placeholder="Selecione a data de vencimento"
           style={{ width: "100%" }}
-          format={{
-            format: "DD/MM/YYYY",
-            type: "mask",
-          }}
         />
       </Form.Item>
 
       <Form.Item name="payment_date" label="Data de Pagamento">
-        <DatePicker
+        <Input
+          type="date"
           placeholder="Selecione a data de pagamento"
           style={{ width: "100%" }}
-          format={{
-            format: "DD/MM/YYYY",
-            type: "mask",
-          }}
         />
       </Form.Item>
 

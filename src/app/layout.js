@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>PFC</title>
+        <title>Financy</title>
       </head>
       <body className={inter.className}>
         <AuthProvider>

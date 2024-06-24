@@ -7,7 +7,6 @@ import {
   Input,
   Select,
   Switch,
-  DatePicker,
   message,
   InputNumber,
   Space,
@@ -36,9 +35,12 @@ export default function EditEntry({ params }) {
       setLoading(true);
       const response = await api.get(`/api/entries/${id}`);
       const entryData = response.data.data;
-      if (entryData.due_date) entryData.due_date = moment(entryData.due_date);
+      if (entryData.due_date)
+        entryData.due_date = moment(entryData.due_date).format("YYYY-MM-DD");
       if (entryData.payment_date)
-        entryData.payment_date = moment(entryData.payment_date);
+        entryData.payment_date = moment(entryData.payment_date).format(
+          "YYYY-MM-DD"
+        );
       form.setFieldsValue(entryData);
     } catch (error) {
       message.error("Erro ao carregar a entrada.");
@@ -82,9 +84,10 @@ export default function EditEntry({ params }) {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      if (values.due_date) values.due_date = values.due_date.toISOString();
+      if (values.due_date)
+        values.due_date = moment(values.due_date).toISOString();
       if (values.payment_date)
-        values.payment_date = values.payment_date.toISOString();
+        values.payment_date = moment(values.payment_date).toISOString();
       await api.put(`/api/entries/${id}`, values);
       message.success("Entrada atualizada com sucesso!");
       fetchItems();
@@ -218,14 +221,16 @@ export default function EditEntry({ params }) {
             },
           ]}
         >
-          <DatePicker
+          <Input
+            type="date"
             placeholder="Selecione a data de vencimento"
             style={{ width: "100%" }}
           />
         </Form.Item>
 
         <Form.Item name="payment_date" label="Data de Pagamento">
-          <DatePicker
+          <Input
+            type="date"
             disabled={
               !!form.getFieldValue("payment_date") &&
               form.getFieldValue("status") === "Paga"
