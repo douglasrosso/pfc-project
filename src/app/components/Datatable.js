@@ -184,8 +184,8 @@ export default function Datatable({
       setLoading(false);
       if (response.data.success) {
         message.success(`${label} excluído(a) com sucesso!`);
-        fetchItems();
       }
+      fetchItems();
     } catch (error) {
       message.error(`Erro ao excluir o(a) ${label}.`);
       setLoading(false);
