@@ -58,17 +58,26 @@ export default function Home() {
 
   return (
     <Fragment>
-      <h1>Bem vindo ao Financy</h1>
+      <h2
+        style={{
+          color: "#1677FF",
+          fontWeight: 400,
+          margin: "10px auto 0",
+        }}
+      >
+        Olá! Você está no
+      </h2>
+      <h1 style={{ color: "#1677FF", margin: "0 auto 10px" }}>Financy</h1>
       <Datatable
         hideNewButton
-        title="Lançamentos do dia"
+        title="Lançamentos do Dia e Atrasados"
         label="lançamento"
         route="entries"
         columns={columns}
         data={expiredInfo?.expiredEntries ?? []}
         customFetch={fetchItems}
       />
-      <Row gutter={16} style={{ marginTop: 2 }}>
+      <Row gutter={16} style={{ marginTop: 2, marginBottom: 15 }}>
         <Col span={12}>
           <Card style={{ border: "1px solid green" }}>
             <Statistic

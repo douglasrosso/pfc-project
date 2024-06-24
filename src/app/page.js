@@ -57,7 +57,7 @@ export default function Home() {
             <h1>Login</h1>
             <div>
               <Form.Item
-                name="email"
+                name="user"
                 rules={[
                   { required: true, message: "Por favor, insira o usuário!" },
                 ]}

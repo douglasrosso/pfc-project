@@ -5,9 +5,7 @@ import User from "@/models/User";
 export async function POST(request) {
   const body = await request.json();
   await connectDB();
-  const user = (
-    await User.find({ email: body.email, pwd: body.password })
-  )?.[0];
+  const user = (await User.find({ user: body.user, pwd: body.password }))?.[0];
   const hasUser = !!user?._id;
 
   if (!hasUser) {
