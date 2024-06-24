@@ -88,7 +88,10 @@ export default function EditEntry({ params }) {
         values.due_date = moment(values.due_date).toISOString();
       if (values.payment_date)
         values.payment_date = moment(values.payment_date).toISOString();
-      await api.put(`/api/entries/${id}`, values);
+      await api.put(`/api/entries/${id}`, {
+        ...values,
+        comments: form.getFieldValue("comments") ? "on" : "off",
+      });
       message.success("Entrada atualizada com sucesso!");
       fetchItems();
       handleSuccess();

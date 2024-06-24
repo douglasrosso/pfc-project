@@ -15,6 +15,7 @@ function filterByExpiredEntries() {
   const today = getTimestamp(new Date().toISOString());
 
   return (e) =>
+    e.comments !== "off" && 
     getTimestamp(e.due_date) <= today &&
     (!getTimestamp(e.payment_date) || getTimestamp(e.payment_date) > today);
 }
@@ -42,6 +43,7 @@ function getUserEntriesInfo(entries) {
     { pastDueReleases: [], releasesOfTheDay: [] }
   );
 }
+
 export async function getExpirationDateMiddleware() {
   await connectDB();
   const entries = await Entry.find();
