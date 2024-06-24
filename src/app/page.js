@@ -21,6 +21,7 @@ export default function Home() {
   };
 
   const handleSuccess = () => {
+    setIsAuthenticated(true);
     router.replace("/home");
   };
 
@@ -41,7 +42,6 @@ export default function Home() {
         handleAfterResponse(response, handleFailed, handleSuccess);
       } finally {
         setLoading(false);
-        setIsAuthenticated(true);
       }
     }, 1000);
   };
